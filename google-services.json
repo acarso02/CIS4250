@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "607855717780",
+    "project_id": "impollse",
+    "storage_bucket": "impollse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607855717780:android:2e023c8a549bf0ad35b381",
+        "android_client_info": {
+          "package_name": "com.PiCrPackages.impollse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "607855717780-i09cf9t3b4o32as90q4s4ol7g90m4rmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaRShcN1xHFnQDqbNkDwCU4o4dFbU2KfQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "607855717780-i09cf9t3b4o32as90q4s4ol7g90m4rmc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
