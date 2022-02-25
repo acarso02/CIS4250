@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
-import {StyleSheet, View, Button, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
+import {StyleSheet, View, Button, Text, TextInput, StatusBar, TouchableOpacity} from "react-native";
 import HomeScreen from './HomeScreen';
+import auth from '@react-native-firebase/auth';
 
 const Register = ({navigation}) => {
 
@@ -41,7 +42,7 @@ const Register = ({navigation}) => {
  
 
    <View style={styles.loginButton}> 
-        <Button title = "Register" color="black" onPress={() =>navigation.navigate(HomeScreen)}> </Button>
+        <Button title = "Register" color="black" onPress={() => navigation.navigate(HomeScreen)}> </Button>
     </View>
 
     </View>

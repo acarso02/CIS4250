@@ -7,7 +7,6 @@ import HomeScreen from './app/HomeScreen';
 import SignIn from './app/SignInScreen';
 import Register from './app/Register';
 
-
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {

@@ -7,6 +7,7 @@ import SignIn from './SignInScreen';
 import Register from './Register';
 
 
+
 const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.background}>
