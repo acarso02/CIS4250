@@ -9,8 +9,6 @@ import Register from './Register';
 import SettingsScreen from './SettingsScreen';
 
 
-
-
 const HomeScreen = ({navigation}) => {
   
 
