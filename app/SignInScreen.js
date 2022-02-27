@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import reactDom from 'react-dom';
-import {StyleSheet, View, Button, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
+import {StyleSheet, View, ScrollView, ImageBackground, Dimensions, Button, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
 import HomeScreen from './HomeScreen';
 
 const SignIn = ({navigation}) => {
@@ -29,13 +29,15 @@ const SignIn = ({navigation}) => {
           onChangeText={(password) => setPassword(password)}
         />
       </View>
+
+      <View style={styles.loginButton}> 
+        <Button title = "Login" color="black" onPress={() =>navigation.navigate(HomeScreen)}> </Button>
+    </View>
  
       <TouchableOpacity>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
-   <View style={styles.loginButton}> 
-        <Button title = "Login" color="black" onPress={() =>navigation.navigate(HomeScreen)}> </Button>
-    </View>
+   
 
     </View>
   );
@@ -66,6 +68,14 @@ const styles = StyleSheet.create({
     height: 45,
     marginBottom: 25,
     alignItems: "center",
+    textAlign: 'center',
+  },
+
+  loginButton: {
+    width: '100%',
+    height: 120,
+    alignItems: 'center',
+    
   },
  
   TextInput: {
