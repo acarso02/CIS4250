@@ -1,105 +1,259 @@
-import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
-import {StyleSheet, View, Button, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
+import {StyleSheet, View, Button, ScrollView, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
 import HomeScreen from './HomeScreen';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import auth from '@react-native-firebase/auth';
+
 
 const Register = ({navigation}) => {
 
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [number, setNumber] = useState("");
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  function authenticateUser(email, password) {
+    auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      console.log('User account created & signed in!');
+    })
+    .catch(error => {
+      if (error.code === 'auth/email-already-in-use') {
+        console.log('That email address is already in use!');
+      }
+
+      if (error.code === 'auth/invalid-email') {
+        console.log('That email address is invalid!');
+      }
+
+      console.error(error);
+    });
+  }
+
+  if (initializing) return null;
+
+  if (!user) {
+    return (
+      <ScrollView style={{flex: 1,backgroundColor:'white'}}
+      showsVerticalScrollIndicator={false}>
+  
+        <View style={styles.checkMark}>
+          <Ionicons name="checkmark-done-circle-sharp" size={140} color="orange" />
+        </View>
+        <View>
+          <Text style={styles.createText}>
+            Create Account
+          </Text>
+        </View>
+        <View style={styles.middleBlob}>
+          <View style={{padding:40}}>
+  
+            {/* Form Name input View */}
+            <View style={styles.inputView}>
+  
+              <View style={styles.mailIcon}>
+                <Ionicons name="person-circle-outline" size={25} color="grey"/>
+              </View>
+              <TextInput
+              style={styles.TextInput}
+              placeholder="Name"
+              placeholderTextColor="grey"
+              
+              onChangeText={(name) => setName(name)}
+              
+              />
+  
+            </View>
+            
+            {/* Email input view */}
+            <View style={styles.inputView}>
+  
+              <View style={styles.mailIcon}>
+                <Ionicons name="mail-outline" size={20} color="grey"/>
+              </View>
+              <TextInput
+              style={styles.TextInput}
+              placeholder="Email"
+              placeholderTextColor="grey"
+              
+              onChangeText={(email) => setEmail(email)}
+              
+              />
+  
+            </View>
+  
+            {/* Password input view */}
+            <View style={styles.passView}>
+             <View style={styles.mailIcon}>
+                <Ionicons name="lock-closed-outline" size={20} color="grey"/>
+              </View>
+  
+              <TextInput
+                style={styles.TextInput}
+                placeholder="Password"
+              
+                placeholderTextColor="grey"
+                secureTextEntry={true}
+                //inlineImageLeft="search_icon"
+                onChangeText={(password) => setPassword(password)}
+              />
+            </View>
+  
+            {/*Phone number input view */}
+            <View style={styles.phoneInput}>
+             <View style={styles.mailIcon}>
+                <Ionicons name="call-outline" size={20} color="grey"/>
+              </View>
+  
+              <TextInput
+                style={styles.TextInput}
+                placeholder="Phone number"
+              
+                placeholderTextColor="grey"
+                secureTextEntry={true}
+                //inlineImageLeft="search_icon"
+                onChangeText={(number) => setNumber(number)}
+              />
+            </View>
+  
+            <View style={styles.signUpButton}> 
+              <Button onPress={() => (email && password)?authenticateUser(email, password):""}
+                      style={styles.buttonText} 
+                      title = "Create" 
+                      color='black' />
+            </View>
+  
+          </View>
+  
+        </View>
+  
+      </ScrollView>
+    );
+  }
+
   return (
-    <View style={styles.background}>
-         <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          onChangeText={(email) => setEmail(email)}
-        />
-      </View>
- 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Confirm Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-      </View>
- 
-
-   <View style={styles.loginButton}> 
-        <Button title = "Register" color="black" onPress={() =>navigation.navigate(HomeScreen)}> </Button>
-    </View>
-
+    <View>
+      <Text>Welcome {user.email}</Text>
     </View>
   );
+
+  //----------------------------------------
+
+  
 }
 
 const styles = StyleSheet.create({
 
-  background: {
-    flex: 1,
-    backgroundColor: 'seashell',
-    justifyContent: 'flex-end'
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
- 
-  image: {
-    marginBottom: 40,
-  },
- 
-  inputView: {
-    backgroundColor: "lavender",
-    borderRadius: 30,
-    width: "100%",
-    height: 45,
-    marginBottom: 25,
-    alignItems: "center",
-  },
- 
-  TextInput: {
-    height: 50,
-    padding: 10,
-    alignItems: "center",
-  },
- 
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
-    alignItems: "center",
+  checkMark: {
+    flex: 0.3,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems:'center',
+    paddingBottom:70,
+    marginTop:0
   },
 
-    loginButton: {
+  signUpButton: {
+    
     width: '100%',
-    height: 100,
-  },
- 
-  loginBtn: {
-    width: "80%",
-    borderRadius: 25,
+    height: 35,
+    alignItems: 'center',
+    //backgroundColor:'black',
+    borderRadius:40,
+    paddingBottom:0,
+    marginTop:20
+},
+
+  TextInput: {
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#FF1493",
+    flex: 1,
+    padding: 5,
+    letterSpacing:2,
+    fontSize:12,
+    textAlign: 'auto'
   },
+
+  inputView: {
+    backgroundColor: "whitesmoke",
+    flexDirection:'row',
+    borderRadius: 50,
+    width: "110%",
+    height: 45,
+    marginBottom: 20,
+    alignItems: "center",
+    borderTopRightRadius:150,
+    borderTopLeftRadius:250,
+    borderBottomLeftRadius:250,
+    borderBottomRightRadius:230,
+    //textAlign: 'center'
+    
+  },
+  passView: {
+    backgroundColor: "whitesmoke",
+    flexDirection:'row',
+    borderRadius: 50,
+    width: "108%",
+    height: 45,
+    marginBottom: 20,
+    alignItems: "center",
+    borderTopRightRadius:100,
+    borderTopLeftRadius:250,
+    borderBottomLeftRadius:200,
+    borderBottomRightRadius:300,
+    //textAlign: 'center'
+    
+  },
+
+  phoneInput: {
+    backgroundColor: "whitesmoke",
+    flexDirection:'row',
+    borderRadius: 350,
+    width: "100%",
+    height: 45,
+    marginBottom: 0,
+    borderTopRightRadius:150,
+    borderTopLeftRadius:250,
+    borderBottomLeftRadius:200,
+    borderBottomRightRadius:350,
+    alignItems: "center",
+    //textAlign: 'center'
+    
+  },
+  createText: {
+    color: 'black',
+    fontSize: 30,
+    fontWeight: 'bold',
+    letterSpacing:2,
+    textAlign:'center',
+    paddingTop:0
+  },
+  middleBlob: {
+    flex: 1.5,
+    backgroundColor: 'orange',
+    bottom: 0,
+    borderTopStartRadius: 430,  
+    borderTopEndRadius: 120,    
+    borderBottomStartRadius:440,  
+    borderBottomEndRadius:720,    
+    marginTop: 30, 
+  }
+  
 });
 
 export default Register;
