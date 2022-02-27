@@ -1,112 +1,161 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
 import {StyleSheet, View, Button, ScrollView, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
 import HomeScreen from './HomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import auth from '@react-native-firebase/auth';
 
 
 const Register = ({navigation}) => {
 
-const [email, setEmail] = useState("");
-const [name, setName] = useState("");
-const [password, setPassword] = useState("");
-const [number, setNumber] = useState("");
-  return (
-    <ScrollView style={{flex: 1,backgroundColor:'white'}}
-    showsVerticalScrollIndicator={false}>
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [number, setNumber] = useState("");
 
-      <View style={styles.checkMark}>
-        <Ionicons name="checkmark-done-circle-sharp" size={140} color="orange" />
-      </View>
-      <View>
-        <Text style={styles.createText}>
-          Create Account
-        </Text>
-      </View>
-      <View style={styles.middleBlob}>
-        <View style={{padding:40}}>
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
-          {/* Form Name input View */}
-          <View style={styles.inputView}>
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
 
-            <View style={styles.mailIcon}>
-              <Ionicons name="person-circle-outline" size={25} color="grey"/>
-            </View>
-            <TextInput
-            style={styles.TextInput}
-            placeholder="Name"
-            placeholderTextColor="grey"
-            
-            onChangeText={(name) => setName(name)}
-            
-            />
+  function authenticateUser(email, password) {
+    auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      console.log('User account created & signed in!');
+    })
+    .catch(error => {
+      if (error.code === 'auth/email-already-in-use') {
+        console.log('That email address is already in use!');
+      }
 
-          </View>
-          
-          {/* Email input view */}
-          <View style={styles.inputView}>
+      if (error.code === 'auth/invalid-email') {
+        console.log('That email address is invalid!');
+      }
 
-            <View style={styles.mailIcon}>
-              <Ionicons name="mail-outline" size={20} color="grey"/>
-            </View>
-            <TextInput
-            style={styles.TextInput}
-            placeholder="Email"
-            placeholderTextColor="grey"
-            
-            onChangeText={(email) => setEmail(email)}
-            
-            />
+      console.error(error);
+    });
+  }
 
-          </View>
+  if (initializing) return null;
 
-          {/* Password input view */}
-          <View style={styles.passView}>
-           <View style={styles.mailIcon}>
-              <Ionicons name="lock-closed-outline" size={20} color="grey"/>
-            </View>
-
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Password"
-            
-              placeholderTextColor="grey"
-              secureTextEntry={true}
-              //inlineImageLeft="search_icon"
-              onChangeText={(password) => setPassword(password)}
-            />
-          </View>
-
-          {/*Phone number input view */}
-          <View style={styles.phoneInput}>
-           <View style={styles.mailIcon}>
-              <Ionicons name="call-outline" size={20} color="grey"/>
-            </View>
-
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Phone number"
-            
-              placeholderTextColor="grey"
-              secureTextEntry={true}
-              //inlineImageLeft="search_icon"
-              onChangeText={(number) => setNumber(number)}
-            />
-          </View>
-
-          <View style={styles.loginButton}> 
-            <Button style={styles.buttonText}title = "Create" color='black' > </Button>
-          </View>
-
-
+  if (!user) {
+    return (
+      <ScrollView style={{flex: 1,backgroundColor:'white'}}
+      showsVerticalScrollIndicator={false}>
+  
+        <View style={styles.checkMark}>
+          <Ionicons name="checkmark-done-circle-sharp" size={140} color="orange" />
         </View>
+        <View>
+          <Text style={styles.createText}>
+            Create Account
+          </Text>
+        </View>
+        <View style={styles.middleBlob}>
+          <View style={{padding:40}}>
+  
+            {/* Form Name input View */}
+            <View style={styles.inputView}>
+  
+              <View style={styles.mailIcon}>
+                <Ionicons name="person-circle-outline" size={25} color="grey"/>
+              </View>
+              <TextInput
+              style={styles.TextInput}
+              placeholder="Name"
+              placeholderTextColor="grey"
+              
+              onChangeText={(name) => setName(name)}
+              
+              />
+  
+            </View>
+            
+            {/* Email input view */}
+            <View style={styles.inputView}>
+  
+              <View style={styles.mailIcon}>
+                <Ionicons name="mail-outline" size={20} color="grey"/>
+              </View>
+              <TextInput
+              style={styles.TextInput}
+              placeholder="Email"
+              placeholderTextColor="grey"
+              
+              onChangeText={(email) => setEmail(email)}
+              
+              />
+  
+            </View>
+  
+            {/* Password input view */}
+            <View style={styles.passView}>
+             <View style={styles.mailIcon}>
+                <Ionicons name="lock-closed-outline" size={20} color="grey"/>
+              </View>
+  
+              <TextInput
+                style={styles.TextInput}
+                placeholder="Password"
+              
+                placeholderTextColor="grey"
+                secureTextEntry={true}
+                //inlineImageLeft="search_icon"
+                onChangeText={(password) => setPassword(password)}
+              />
+            </View>
+  
+            {/*Phone number input view */}
+            <View style={styles.phoneInput}>
+             <View style={styles.mailIcon}>
+                <Ionicons name="call-outline" size={20} color="grey"/>
+              </View>
+  
+              <TextInput
+                style={styles.TextInput}
+                placeholder="Phone number"
+              
+                placeholderTextColor="grey"
+                secureTextEntry={true}
+                //inlineImageLeft="search_icon"
+                onChangeText={(number) => setNumber(number)}
+              />
+            </View>
+  
+            <View style={styles.signUpButton}> 
+              <Button onPress={() => (email && password)?authenticateUser(email, password):""}
+                      style={styles.buttonText} 
+                      title = "Create" 
+                      color='black' />
+            </View>
+  
+          </View>
+  
+        </View>
+  
+      </ScrollView>
+    );
+  }
 
-      </View>
-    
-
-    </ScrollView>
+  return (
+    <View>
+      <Text>Welcome {user.email}</Text>
+    </View>
   );
+
+  //----------------------------------------
+
+  
 }
 
 const styles = StyleSheet.create({
@@ -120,7 +169,7 @@ const styles = StyleSheet.create({
     marginTop:0
   },
 
-  loginButton: {
+  signUpButton: {
     
     width: '100%',
     height: 35,
