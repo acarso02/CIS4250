@@ -13,19 +13,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-<<<<<<< HEAD
 const MyStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>   
         <Stack.Screen name="Home" component={HomeScreen} options = {{title: 'Welcome'}}/>
-=======
-export default () => (
-  <NavigationContainer>
-      <Stack.Navigator>
-  
-        <Stack.Screen options = {{headerShown:false}} name="Home" component={HomeScreen} />
->>>>>>> bb4169a3f4fd2ae7e50208ce6a88d3aadaa058f7
         <Stack.Screen name="SignIn" component={SignIn} options = {{title: 'Sign in'}}/>
 
         <Stack.Screen name="Register" component={Register} options = {{headerShown: false}}/>
