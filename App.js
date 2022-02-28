@@ -4,7 +4,7 @@ import {StyleSheet, View, Button, Text, TouchableWithoutFeedback} from "react-na
 import { NavigationContainer, TabActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './app/HomeScreen';
-import SignIn from './app/SignInScreen';
+import SignInScreen from './app/SignInScreen';
 import Register from './app/Register';
 import SettingsScreen from './app/SettingsScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,8 +19,8 @@ export default () => (
   <NavigationContainer>
       <Stack.Navigator>
 
-        <Stack.Screen options = {{headerShown:false}} name="Home" component={HomeScreen} />
-        <Stack.Screen name="SignIn" component={SignIn} options = {{title: 'Sign in'}}/>
+        <Stack.Screen options = {{headerShown:false}} name="Home" component={SignInScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} options = {{title: 'Home'}}/>
 
         <Stack.Screen name="Register" component={Register} options = {{headerShown: false}}/>
       </Stack.Navigator>
