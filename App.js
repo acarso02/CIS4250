@@ -10,8 +10,6 @@ import SettingsScreen from './app/SettingsScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 //import Tabs from './navigation/tabs';
 
-
-
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -19,9 +17,8 @@ export default () => (
   <NavigationContainer>
       <Stack.Navigator>
 
-        <Stack.Screen options = {{headerShown:false}} name="Home" component={SignInScreen} />
+        <Stack.Screen name="SignInScreen" component={SignInScreen} options = {{headerShown:false}} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} options = {{title: 'Home'}}/>
-
         <Stack.Screen name="Register" component={Register} options = {{headerShown: false}}/>
       </Stack.Navigator>
 

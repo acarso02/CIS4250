@@ -27,50 +27,33 @@ const HomeScreen = ({navigation}) => {
   if (initializing) return null;
 
   function signOut(){
-    auth()
-    .signOut()
-    .then(() => {
-      console.log('User signed out!');
+
+    if(user){
+      auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        navigation.navigate(SignInScreen);
+      })
+    }
+    else { //Shouldn't be reaching here but does for some reason. When signing in it doesn't recognize the user
+      console.log('User not signed in!');
       navigation.navigate(SignInScreen);
-    })
+    }
+    
   }
 
   return (
     <View style={styles.background}>
-         <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          onChangeText={(email) => setEmail(email)}
-        />
-      </View>
- 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-      </View>
-
-      <View style={styles.loginButton}> 
-        <Button title = "Login" color="black" onPress={() =>navigation.navigate(HomeScreen)}> </Button>
-<<<<<<< HEAD
-      </View>
-=======
-        <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
-    </View>
->>>>>>> e4052d874ce3d81f00fbdce41409c0a3e2978688
+      
+      <StatusBar style="auto" />
+      
+      <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
  
       <TouchableOpacity>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
    
-
     </View>
   );
 }

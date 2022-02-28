@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, createContext} from 'react';
 import reactDom from 'react-dom';
 import {StyleSheet, Input, View, Button, ScrollView, ImageBackground, Dimensions, Text, TextInput, StatusBar, TouchableOpacity, TouchableWithoutFeedback, ListViewComponent} from "react-native"
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,118 +11,116 @@ import auth from '@react-native-firebase/auth';
 
 const SignInScreen = ({navigation}) => {
   
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  
   //const image = {uri: "https://toppng.com/uploads/preview/orange-splat-orange-paint-splash-11562922076goctvo3zry.png"};
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
+  function logIn(email, password){
+    auth()
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      console.log("Logged In!");
+      navigation.navigate(HomeScreen);
+    })
+    .catch(error => {
+      if (error.code) {
+        console.log(error.code);
+      }
 
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing)
-      setInitializing(false);
+      console.error(error);
+    });
   }
 
-
-  if (initializing) return null;
-
-  if (!user) {
-    return (
-      <ScrollView style={{flex: 1,backgroundColor:'white'}}
-      showsVerticalScrollIndicator={false}>
+  return (
+    <ScrollView style={{flex: 1,backgroundColor:'white'}}
+    showsVerticalScrollIndicator={false}>
+      
+      {/* Top View of the Brand */}
+      <View style={styles.brandView}>
+        <Ionicons name="checkmark-done-circle-sharp" size={140} color="orange" />
         
-        {/* Top View of the Brand */}
-        <View style={styles.brandView}>
-          <Ionicons name="checkmark-done-circle-sharp" size={140} color="orange" />
+      </View>
+
+      {/* Bottom/Welcome View of Brand*/}
+      <View style={styles.bottomView}>
+        {/* Welcome View */}
+        <View style={{padding:40}}>
+          <Text style={{color: 'black',fontSize:34, letterSpacing: 1.5,fontWeight:'bold'}}>Hello</Text>
+          <Text>
           
-        </View>
+            <Text style={{color:'black',letterSpacing: 2,fontSize: 15,}}>Sign in to your account</Text>
+          </Text>
 
-        {/* Bottom/Welcome View of Brand*/}
-        <View style={styles.bottomView}>
-          {/* Welcome View */}
-          <View style={{padding:40}}>
-            <Text style={{color: 'black',fontSize:34, letterSpacing: 1.5,fontWeight:'bold'}}>Hello</Text>
-            <Text>
-            
-              <Text style={{color:'black',letterSpacing: 2,fontSize: 15,}}>Sign in to your account</Text>
-            </Text>
+          {/* Form Email input View */}
+          <View style={styles.inputView}>
 
-            {/* Form Email input View */}
-            <View style={styles.inputView}>
-
-              <View style={styles.mailIcon}>
-                <Ionicons name="mail-outline" size={20} color="grey"/>
-              </View>
-              <TextInput
-              style={styles.TextInput}
-              placeholder="Email"
-              placeholderTextColor="grey"
-              
-              onChangeText={(email) => setEmail(email)}
-              
-              />
-
-            </View>
-
-            {/* Form Password input View */}
-            <View style={styles.inputView}>
             <View style={styles.mailIcon}>
-                <Ionicons name="lock-closed-outline" size={20} color="grey"/>
-                
-              </View>
+              <Ionicons name="mail-outline" size={20} color="grey"/>
+            </View>
+            <TextInput
+            style={styles.TextInput}
+            placeholder="Email"
+            placeholderTextColor="grey"
+            
+            onChangeText={(email) => setEmail(email)}
+            
+            />
 
-              <TextInput
-                style={styles.TextInput}
-                placeholder="Password"
+          </View>
+
+          {/* Form Password input View */}
+          <View style={styles.inputView}>
+          <View style={styles.mailIcon}>
+              <Ionicons name="lock-closed-outline" size={20} color="grey"/>
               
-                placeholderTextColor="grey"
-                secureTextEntry={true}
-                //inlineImageLeft="search_icon"
-                onChangeText={(password) => setPassword(password)}
-              />
             </View>
 
-            <TouchableOpacity>
-              <Text style={styles.forgot_button}>Forgot Password?</Text>
-            </TouchableOpacity>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Password"
+            
+              placeholderTextColor="grey"
+              secureTextEntry={true}
+              //inlineImageLeft="search_icon"
+              onChangeText={(password) => setPassword(password)}
+            />
+          </View>
 
-            <View style={styles.loginButton}> 
-              <Button style={styles.buttonText}title = "Log In" color='black' onPress={() =>navigation.navigate(HomeScreen)}> </Button>
-            </View>
+          <TouchableOpacity>
+            <Text style={styles.forgot_button}>Forgot Password?</Text>
+          </TouchableOpacity>
 
+          <View style={styles.loginButton}> 
+            <Button style={styles.buttonText}title = "Log In" color='black' onPress={() =>{logIn(email, password)}}> </Button>
           </View>
 
         </View>
 
-        <View style={styles.dontHave}>
-        <Text style={{color:'black',fontSize: 15,marginLeft:90, letterSpacing: 2,marginTop: 60,paddingBottom:0}}> Don't have an account?</Text>
+      </View>
 
-        
-          <TouchableOpacity onPress={()=>navigation.navigate(Register)}>
-                <Text style={styles.createAccount}>Create</Text>
-                
-              </TouchableOpacity>
-        </View>
-      </ScrollView>
-    );
-  }
+      <View style={styles.dontHave}>
+      <Text style={{color:'black',fontSize: 15,marginLeft:90, letterSpacing: 2,marginTop: 60,paddingBottom:0}}> Don't have an account?</Text>
 
-  return (
-    <View>
-      <Text>Welcome {user.email}</Text>
-      <Button title = "Login" color="black" onPress={navigation.navigate(HomeScreen, user)} style={{margin:50}}> </Button>
-    </View>
+      
+        <TouchableOpacity onPress={()=>navigation.navigate(Register)}>
+              <Text style={styles.createAccount}>Create</Text>
+              
+            </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
+  // }
+
+  // return (
+  //   <View>
+  //     {navigation.navigate(HomeScreen)}
+  //   </View>
+  // );
 
 }
-
 
 export default SignInScreen;
 

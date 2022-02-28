@@ -14,12 +14,12 @@ const Register = ({navigation}) => {
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
 
-  function authenticateUser(email, password) {
+  function createUser(email, password) {
     auth()
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account created & signed in!');
-      navigation.navigate(Register);
+      navigation.navigate(HomeScreen);
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
@@ -120,7 +120,7 @@ const Register = ({navigation}) => {
           </View>
 
           <View style={styles.signUpButton}> 
-            <Button onPress={() => (email && password)?authenticateUser(email, password):""}
+            <Button onPress={() => (email && password)?createUser(email, password):""}
                     style={styles.buttonText} 
                     title = "Create" 
                     color='black' />
@@ -132,10 +132,6 @@ const Register = ({navigation}) => {
 
     </ScrollView>
   );
-
-
-  //----------------------------------------
-
   
 }
 
