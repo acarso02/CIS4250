@@ -32,7 +32,7 @@ const HomeScreen = ({navigation}) => {
 
       <View style={styles.loginButton}> 
         <Button title = "Login" color="black" onPress={() =>navigation.navigate(HomeScreen)}> </Button>
-    </View>
+      </View>
  
       <TouchableOpacity>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
