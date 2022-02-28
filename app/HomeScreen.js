@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
 import {StyleSheet, View, ScrollView, ImageBackground, Dimensions, Button, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
 import SignInScreen from './SignInScreen';
+import auth from '@react-native-firebase/auth';
 
 const HomeScreen = ({navigation}) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+  //const image = {uri: "https://toppng.com/uploads/preview/orange-splat-orange-paint-splash-11562922076goctvo3zry.png"};
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing)
+      setInitializing(false);
+  }
+
+  if (initializing) return null;
+
+  function signOut(){
+    auth()
+    .signOut()
+    .then(() => {
+      console.log('User signed out!');
+      navigation.navigate(SignInScreen);
+    })
+  }
+
   return (
     <View style={styles.background}>
          <StatusBar style="auto" />
@@ -32,7 +59,12 @@ const HomeScreen = ({navigation}) => {
 
       <View style={styles.loginButton}> 
         <Button title = "Login" color="black" onPress={() =>navigation.navigate(HomeScreen)}> </Button>
+<<<<<<< HEAD
       </View>
+=======
+        <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
+    </View>
+>>>>>>> e4052d874ce3d81f00fbdce41409c0a3e2978688
  
       <TouchableOpacity>
         <Text style={styles.forgot_button}>Forgot Password?</Text>

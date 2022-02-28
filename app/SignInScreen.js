@@ -26,8 +26,10 @@ const SignInScreen = ({navigation}) => {
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
-    if (initializing) setInitializing(false);
+    if (initializing)
+      setInitializing(false);
   }
+
 
   if (initializing) return null;
 
@@ -115,7 +117,7 @@ const SignInScreen = ({navigation}) => {
   return (
     <View>
       <Text>Welcome {user.email}</Text>
-      <Button title = "Login" color="black" onPress={() =>navigation.navigate(HomeScreen)}> </Button>
+      <Button title = "Login" color="black" onPress={navigation.navigate(HomeScreen, user)} style={{margin:50}}> </Button>
     </View>
   );
 
