@@ -16,17 +16,6 @@ const Register = ({navigation}) => {
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
   function authenticateUser(email, password) {
     auth()
     .createUserWithEmailAndPassword(email, password)
