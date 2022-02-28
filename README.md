@@ -21,3 +21,6 @@
 - sudo chown -R $USER /usr/local/lib/node_modules
 - eas build:configure
 - expo run:android -d
+
+## IF YOU ARE GETTING PERMISSION ERRORS
+- Remove .expo from your C:/Users/username directory
