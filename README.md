@@ -18,6 +18,7 @@
 - npm install @expo/vector-icons
 
 ## Requirements for running the app
+- sudo npm install -g eas-cli
 - eas build:configure
 - expo run:android
 
