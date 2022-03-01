@@ -12,6 +12,8 @@ const HomeScreen = ({navigation}) => {
   const [user, setUser] = useState();
   //const image = {uri: "https://toppng.com/uploads/preview/orange-splat-orange-paint-splash-11562922076goctvo3zry.png"};
 
+
+  /*This must be imported into each screen so that we can access the logged-in user at any time*/
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
@@ -23,6 +25,7 @@ const HomeScreen = ({navigation}) => {
     if (initializing)
       setInitializing(false);
   }
+  /* ----------------------------------------------------------------------------------------- */
 
   if (initializing) return null;
 

@@ -18,9 +18,8 @@
 - npm install @expo/vector-icons
 
 ## Requirements for running the app
-- sudo chown -R $USER /usr/local/lib/node_modules
 - eas build:configure
-- expo run:android -d
+- expo run:android
 
-## IF YOU ARE GETTING PERMISSION ERRORS
+## USE CASE: IF YOU ARE GETTING PERMISSION ERRORS
 - Remove .expo from your C:/Users/username directory
