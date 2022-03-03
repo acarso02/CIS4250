@@ -3,158 +3,138 @@ import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
 import {StyleSheet, View, Button, ScrollView, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
 import HomeScreen from './HomeScreen';
+import SignInScreen from './SignInScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import auth from '@react-native-firebase/auth';
 
-
 const Register = ({navigation}) => {
 
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  function authenticateUser(email, password) {
+  function createUser(email, password) {
     auth()
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account created & signed in!');
+      navigation.navigate(HomeScreen);
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
         console.log('That email address is already in use!');
+        alert('That email address is already in use!');
       }
-
-      if (error.code === 'auth/invalid-email') {
+      else if (error.code === 'auth/invalid-email') {
         console.log('That email address is invalid!');
+        alert('That email address is invalid!');
+      }
+      else if (error.code === 'auth/weak-password') {
+        console.log('The password is too weak, and requires a minimum of 6 characters.');
+        alert('The password is too weak, and requires a minimum of 6 characters.');
       }
 
       console.error(error);
     });
   }
 
-  if (initializing) return null;
-
-  if (!user) {
-    return (
-      <ScrollView style={{flex: 1,backgroundColor:'white'}}
-      showsVerticalScrollIndicator={false}>
-  
-        <View style={styles.checkMark}>
-          <Ionicons name="checkmark-done-circle-sharp" size={140} color="orange" />
-        </View>
-        <View>
-          <Text style={styles.createText}>
-            Create Account
-          </Text>
-        </View>
-        <View style={styles.middleBlob}>
-          <View style={{padding:40}}>
-  
-            {/* Form Name input View */}
-            <View style={styles.inputView}>
-  
-              <View style={styles.mailIcon}>
-                <Ionicons name="person-circle-outline" size={25} color="grey"/>
-              </View>
-              <TextInput
-              style={styles.TextInput}
-              placeholder="Name"
-              placeholderTextColor="grey"
-              
-              onChangeText={(name) => setName(name)}
-              
-              />
-  
-            </View>
-            
-            {/* Email input view */}
-            <View style={styles.inputView}>
-  
-              <View style={styles.mailIcon}>
-                <Ionicons name="mail-outline" size={20} color="grey"/>
-              </View>
-              <TextInput
-              style={styles.TextInput}
-              placeholder="Email"
-              placeholderTextColor="grey"
-              
-              onChangeText={(email) => setEmail(email)}
-              
-              />
-  
-            </View>
-  
-            {/* Password input view */}
-            <View style={styles.passView}>
-             <View style={styles.mailIcon}>
-                <Ionicons name="lock-closed-outline" size={20} color="grey"/>
-              </View>
-  
-              <TextInput
-                style={styles.TextInput}
-                placeholder="Password"
-              
-                placeholderTextColor="grey"
-                secureTextEntry={true}
-                //inlineImageLeft="search_icon"
-                onChangeText={(password) => setPassword(password)}
-              />
-            </View>
-  
-            {/*Phone number input view */}
-            <View style={styles.phoneInput}>
-             <View style={styles.mailIcon}>
-                <Ionicons name="call-outline" size={20} color="grey"/>
-              </View>
-  
-              <TextInput
-                style={styles.TextInput}
-                placeholder="Phone number"
-              
-                placeholderTextColor="grey"
-                secureTextEntry={true}
-                //inlineImageLeft="search_icon"
-                onChangeText={(number) => setNumber(number)}
-              />
-            </View>
-  
-            <View style={styles.signUpButton}> 
-              <Button onPress={() => (email && password)?authenticateUser(email, password):""}
-                      style={styles.buttonText} 
-                      title = "Create" 
-                      color='black' />
-            </View>
-  
-          </View>
-  
-        </View>
-  
-      </ScrollView>
-    );
-  }
-
   return (
-    <View>
-      <Text>Welcome {user.email}</Text>
-    </View>
+    <ScrollView style={{flex: 1,backgroundColor:'white'}}
+    showsVerticalScrollIndicator={false}>
+
+      <View style={styles.checkMark}>
+        <Ionicons name="checkmark-done-circle-sharp" size={140} color="orange" />
+      </View>
+      <View>
+        <Text style={styles.createText}>
+          Create Account
+        </Text>
+      </View>
+      <View style={styles.middleBlob}>
+        <View style={{padding:40}}>
+
+          {/* Form Name input View */}
+          <View style={styles.inputView}>
+
+            <View style={styles.mailIcon}>
+              <Ionicons name="person-circle-outline" size={25} color="grey"/>
+            </View>
+            <TextInput
+            style={styles.TextInput}
+            placeholder="Name"
+            placeholderTextColor="grey"
+            
+            onChangeText={(name) => setName(name)}
+            
+            />
+
+          </View>
+          
+          {/* Email input view */}
+          <View style={styles.inputView}>
+
+            <View style={styles.mailIcon}>
+              <Ionicons name="mail-outline" size={20} color="grey"/>
+            </View>
+            <TextInput
+            style={styles.TextInput}
+            placeholder="Email"
+            placeholderTextColor="grey"
+            
+            onChangeText={(email) => setEmail(email)}
+            
+            />
+
+          </View>
+
+          {/* Password input view */}
+          <View style={styles.passView}>
+            <View style={styles.mailIcon}>
+              <Ionicons name="lock-closed-outline" size={20} color="grey"/>
+            </View>
+
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Password"
+            
+              placeholderTextColor="grey"
+              secureTextEntry={true}
+              //inlineImageLeft="search_icon"
+              onChangeText={(password) => setPassword(password)}
+            />
+          </View>
+
+          {/*Phone number input view */}
+          <View style={styles.phoneInput}>
+            <View style={styles.mailIcon}>
+              <Ionicons name="call-outline" size={20} color="grey"/>
+            </View>
+
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Phone number"
+            
+              placeholderTextColor="grey"
+              secureTextEntry={true}
+              //inlineImageLeft="search_icon"
+              onChangeText={(number) => setNumber(number)}
+            />
+          </View>
+
+          <View style={styles.signUpButton}> 
+            <Button onPress={() => createUser(email, password)}
+                    style={styles.buttonText} 
+                    title = "Create" 
+                    color='black' />
+          </View>
+
+        </View>
+
+      </View>
+
+    </ScrollView>
   );
-
-  //----------------------------------------
-
   
 }
 
