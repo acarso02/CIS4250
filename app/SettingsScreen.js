@@ -12,8 +12,6 @@ import Notifications from './Notifications';
 import Profile from './Profile';
 import Upload from './Upload';
 
-const Tab = createBottomTabNavigator();
-
 const SettingsScreen = () => {
     return(
       <ScrollView style={{flex: 1,backgroundColor:'white'}}
@@ -22,55 +20,7 @@ const SettingsScreen = () => {
         <View>
           <Text>Hi</Text>
         </View>
-        <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color-glass/48/000000/home.png',
-                    }}
-                  />
-                );
-              }, }} />
-          <Tab.Screen name="Notifications" component={Notifications}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color-glass/48/000000/appointment-reminders.png',
-                    }}
-                  />
-                );
-              },  }} />
-          <Tab.Screen name="Upload" component={Upload}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color-glass/48/000000/camera.png',
-                    }}
-                  />
-                );
-              },  }} />
-          <Tab.Screen name="Profile" component={Profile}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color/48/000000/user.png',
-                    }}
-                  />
-                );
-              },  }} />
 
-          
-        </Tab.Navigator>
-        
       </ScrollView>
 
     )

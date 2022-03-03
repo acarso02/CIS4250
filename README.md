@@ -16,6 +16,7 @@
 - npm install @react-navigation/native
 - npm install @react-navigation/native-stack
 - npm install @expo/vector-icons
+- npm install react-native-image-picker
 
 ## Requirements for running the app
 - sudo npm install -g eas-cli

@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import reactDom from 'react-dom';
 import {StyleSheet, Input, View, Button, ScrollView, ImageBackground, Dimensions, Text, TextInput, StatusBar, TouchableOpacity, TouchableWithoutFeedback, ListViewComponent} from "react-native"
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SearchBar } from 'react-native-elements';
@@ -19,54 +20,7 @@ const Profile = ({navigation}) => {
             PROFILE Page
           </Text>
         </View>
-        {/* <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-              return (
-                <Image
-                  style={{ width: size, height: size }}
-                  source={{
-                    uri:
-                      'https://img.icons8.com/color-glass/48/000000/home.png',
-                  }}
-                />
-              );
-            }, }} />
-        <Tab.Screen name="Notifications" component={Notifications}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-              return (
-                <Image
-                  style={{ width: size, height: size }}
-                  source={{
-                    uri:
-                      'https://img.icons8.com/color-glass/48/000000/appointment-reminders.png',
-                  }}
-                />
-              );
-            },  }} />
-        <Tab.Screen name="Upload" component={Upload}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-              return (
-                <Image
-                  style={{ width: size, height: size }}
-                  source={{
-                    uri:
-                      'https://img.icons8.com/color-glass/48/000000/camera.png',
-                  }}
-                />
-              );
-            },  }} />
-        <Tab.Screen name="Profile" component={Profile}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-              return (
-                <Image
-                  style={{ width: size, height: size }}
-                  source={{
-                    uri:
-                      'https://img.icons8.com/color/48/000000/user.png',
-                  }}
-                />
-              );
-            },  }} />
-
         
-        </Tab.Navigator> */}
       </ScrollView>
     )
 }

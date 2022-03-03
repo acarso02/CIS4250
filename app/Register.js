@@ -19,6 +19,7 @@ const Register = ({navigation}) => {
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account created & signed in!');
+      //CREATE NEW USER IN REALTIME DATABASE HERE
       navigation.navigate(HomeScreen);
     })
     .catch(error => {

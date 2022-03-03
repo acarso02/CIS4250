@@ -5,14 +5,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SearchBar } from 'react-native-elements';
+import { ImagePicker, launchImageLibrary } from 'react-native-image-picker';
+import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 import SignInScreen from './SignInScreen';
 import SettingsScreen from './SettingsScreen';
 import Notifications from './Notifications';
 import Profile from './Profile';
 import Upload from './Upload';
-import auth from '@react-native-firebase/auth';
-
-
 
 const HomeScreen = ({navigation}) => {
 
@@ -20,6 +20,10 @@ const HomeScreen = ({navigation}) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState(); 
+  const options = {
+    title: 'Select an Image'
+  }
 
   /*This must be imported into each screen so that we can access the logged-in user at any time*/
   const [initializing, setInitializing] = useState(true);
@@ -57,6 +61,33 @@ const HomeScreen = ({navigation}) => {
     
   }
 
+  function browseImages() {
+
+    launchImageLibrary(options, (response) => {
+      let assets = response.assets[0]
+      console.log(assets);
+      setImage(assets);
+    }).then(() => {
+      uploadToCloud(image.uri, image.fileName);
+    })
+
+  }
+
+  function uploadToCloud(path, imageName) {
+
+    console.log(path, imageName)
+    
+    let reference = storage().ref("Test/"+imageName);
+    let task = reference.putFile(path);
+
+    task.then(() => {
+      console.log('Image uploaded to the bucket!');
+    })
+    .catch((e) => {
+      console.log('uploading image error => ', e);
+    })
+  }
+
   return (
     <ScrollView style={{flex: 1,backgroundColor:'white'}}
     showsVerticalScrollIndicator={false}>
@@ -70,10 +101,23 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.background}>
         
         <StatusBar style="auto" />
+
+        <View style={{flexDirection:"row"}}>
         
+          <Image 
+            style={styles.logo}
+            source={{uri:image.uri}}
+          />
+          <Image 
+            style={styles.logo}
+            source={{uri:image.uri}}        
+          />
+
+        </View>
+
         <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
 
-        <Button title = "Click ME!" color="black" onPress={() =>{console.log(user)}}> </Button>
+        <Button title = "Upload Image!" color="black" onPress={() =>{browseImages()}}> </Button>
 
         <Button title = "Settings" color="black" onPress={() =>{navigation.navigate(SettingsScreen)}}> </Button>
         <Button title = "Notifications" color="black" onPress={() =>{navigation.navigate(Notifications)}}> </Button>
@@ -84,54 +128,7 @@ const HomeScreen = ({navigation}) => {
         </TouchableOpacity>
     
       </View>
-      {/* <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color-glass/48/000000/home.png',
-                    }}
-                  />
-                );
-              }, }} />
-          <Tab.Screen name="Notifications" component={Notifications}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color-glass/48/000000/appointment-reminders.png',
-                    }}
-                  />
-                );
-              },  }} />
-          <Tab.Screen name="Upload" component={Upload}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color-glass/48/000000/camera.png',
-                    }}
-                  />
-                );
-              },  }} />
-          <Tab.Screen name="Profile" component={Profile}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color/48/000000/user.png',
-                    }}
-                  />
-                );
-              },  }} />
-
-          
-        </Tab.Navigator> */}
+      
     </ScrollView>
   );
 }
@@ -150,8 +147,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
  
-  image: {
-    marginBottom: 40,
+  logo: {
+    width: 200,
+    height: 400,
   },
  
   inputView: {
