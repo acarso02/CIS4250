@@ -68,6 +68,7 @@ const HomeScreen = ({navigation}) => {
       console.log(assets);
       setImage(assets);
     }).then(() => {
+      console.log(image.uri, image.fileName);
       uploadToCloud(image.uri, image.fileName);
     })
 
@@ -102,7 +103,7 @@ const HomeScreen = ({navigation}) => {
         
         <StatusBar style="auto" />
 
-        <View style={{flexDirection:"row"}}>
+        {/* <View style={{flexDirection:"row"}}>
         
           <Image 
             style={styles.logo}
@@ -113,13 +114,13 @@ const HomeScreen = ({navigation}) => {
             source={{uri:image.uri}}        
           />
 
-        </View>
+        </View> */}
 
         <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
 
         <Button title = "Upload Image!" color="black" onPress={() =>{browseImages()}}> </Button>
 
-        <Button title = "Settings" color="black" onPress={() =>{navigation.navigate(SettingsScreen)}}> </Button>
+        <Button title = "Settings" color="black" onPress={() =>{console.log(user)}}> </Button>
         <Button title = "Notifications" color="black" onPress={() =>{navigation.navigate(Notifications)}}> </Button>
         <Button title = "Profile" color="black" onPress={() =>{navigation.navigate(Profile)}}> </Button>
   
