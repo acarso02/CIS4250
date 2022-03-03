@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
-import {StyleSheet, View, ScrollView, ImageBackground, Dimensions, Button, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
+import {StyleSheet, Image, Input, View, Button, ScrollView, ImageBackground, Dimensions, Text, TextInput, StatusBar, TouchableOpacity, TouchableWithoutFeedback, ListViewComponent} from "react-native"
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SearchBar } from 'react-native-elements';
 import SignInScreen from './SignInScreen';
+import SettingsScreen from './SettingsScreen';
+import Notifications from './Notifications';
+import Profile from './Profile';
+import Upload from './Upload';
 import auth from '@react-native-firebase/auth';
+
+
 
 const HomeScreen = ({navigation}) => {
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
   //const image = {uri: "https://toppng.com/uploads/preview/orange-splat-orange-paint-splash-11562922076goctvo3zry.png"};
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   /*This must be imported into each screen so that we can access the logged-in user at any time*/
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
@@ -47,17 +58,81 @@ const HomeScreen = ({navigation}) => {
   }
 
   return (
-    <View style={styles.background}>
-      
-      <StatusBar style="auto" />
-      
-      <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
- 
-      <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
-   
-    </View>
+    <ScrollView style={{flex: 1,backgroundColor:'white'}}
+    showsVerticalScrollIndicator={false}>
+      <View> 
+        <SearchBar
+          placeholder='Search'
+          textFieldBackgroundColor='blue'
+          />
+      </View>
+
+      <View style={styles.background}>
+        
+        <StatusBar style="auto" />
+        
+        <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
+
+        <Button title = "Click ME!" color="black" onPress={() =>{console.log(user)}}> </Button>
+
+        <Button title = "Settings" color="black" onPress={() =>{navigation.navigate(SettingsScreen)}}> </Button>
+        <Button title = "Notifications" color="black" onPress={() =>{navigation.navigate(Notifications)}}> </Button>
+        <Button title = "Profile" color="black" onPress={() =>{navigation.navigate(Profile)}}> </Button>
+  
+        <TouchableOpacity>
+          <Text style={styles.forgot_button}>Forgot Password?</Text>
+        </TouchableOpacity>
+    
+      </View>
+      {/* <Tab.Navigator>
+          <Tab.Screen name="Home" component={HomeScreen}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
+                return (
+                  <Image
+                    style={{ width: size, height: size }}
+                    source={{
+                      uri:
+                        'https://img.icons8.com/color-glass/48/000000/home.png',
+                    }}
+                  />
+                );
+              }, }} />
+          <Tab.Screen name="Notifications" component={Notifications}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
+                return (
+                  <Image
+                    style={{ width: size, height: size }}
+                    source={{
+                      uri:
+                        'https://img.icons8.com/color-glass/48/000000/appointment-reminders.png',
+                    }}
+                  />
+                );
+              },  }} />
+          <Tab.Screen name="Upload" component={Upload}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
+                return (
+                  <Image
+                    style={{ width: size, height: size }}
+                    source={{
+                      uri:
+                        'https://img.icons8.com/color-glass/48/000000/camera.png',
+                    }}
+                  />
+                );
+              },  }} />
+          <Tab.Screen name="Profile" component={Profile}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
+                return (
+                  <Image
+                    style={{ width: size, height: size }}
+                    source={{
+                      uri:
+                        'https://img.icons8.com/color/48/000000/user.png',
+                    }}
+                  />
+                );
+              },  }} />
+
+          
+        </Tab.Navigator> */}
+    </ScrollView>
   );
 }
 

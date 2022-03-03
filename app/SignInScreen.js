@@ -6,7 +6,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './HomeScreen';
 import Register from './Register';
-import SettingsScreen from './SettingsScreen';
 import auth from '@react-native-firebase/auth';
 
 const SignInScreen = ({navigation}) => {
@@ -26,7 +25,17 @@ const SignInScreen = ({navigation}) => {
       navigation.navigate(HomeScreen);
     })
     .catch(error => {
-      if (error.code) {
+      //UPDATE ERROR CODES WITH MODAL INSTEAD OF 
+      if (error.code === 'auth/invalid-email') {
+        alert("Invalid email selected.");
+        console.log(error.code);
+      }
+      else if (error.code === 'auth/user-not-found') {
+        alert("Email does not exist.");
+        console.log(error.code);
+      }
+      else if (error.code === 'auth/wrong-password') {
+        alert("Invalid password, please try again.");
         console.log(error.code);
       }
 

@@ -26,10 +26,13 @@ const Register = ({navigation}) => {
         console.log('That email address is already in use!');
         alert('That email address is already in use!');
       }
-
-      if (error.code === 'auth/invalid-email') {
+      else if (error.code === 'auth/invalid-email') {
         console.log('That email address is invalid!');
         alert('That email address is invalid!');
+      }
+      else if (error.code === 'auth/weak-password') {
+        console.log('The password is too weak, and requires a minimum of 6 characters.');
+        alert('The password is too weak, and requires a minimum of 6 characters.');
       }
 
       console.error(error);
@@ -120,7 +123,7 @@ const Register = ({navigation}) => {
           </View>
 
           <View style={styles.signUpButton}> 
-            <Button onPress={() => (email && password)?createUser(email, password):""}
+            <Button onPress={() => createUser(email, password)}
                     style={styles.buttonText} 
                     title = "Create" 
                     color='black' />
