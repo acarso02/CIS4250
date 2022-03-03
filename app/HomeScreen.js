@@ -105,14 +105,14 @@ const HomeScreen = ({navigation}) => {
 
         {/* <View style={{flexDirection:"row"}}>
         
-          <Image 
+          {/* <Image 
             style={styles.logo}
             source={{uri:image.uri}}
           />
           <Image 
             style={styles.logo}
-            source={{uri:image.uri}}        
-          />
+            source={{uri:image.uri}}
+          /> */}
 
         </View> */}
 
