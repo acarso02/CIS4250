@@ -1,6 +1,7 @@
 # CIS4250
 
 ## Required Installations to Run Project
+
 - yarn (Any version) installed on native terminal (e.g. Windows = powershell)
 - npm (Less than v8.0.0) yarn install npm
 - node (Version v16.14.0 or less) Installed online
@@ -8,6 +9,7 @@
 - eas-cli (v0.47.0) sudo npm install -g eas-cli
 
 ## Npm requirements
+
 - npm install --save firebase
 - npm install @react-native-firebase/app
 - npm install @react-native-firebase/auth
@@ -18,9 +20,11 @@
 - npm install @expo/vector-icons
 
 ## Requirements for running the app
+
 - sudo npm install -g eas-cli
 - eas build:configure
 - expo run:android
 
 ## USE CASE: IF YOU ARE GETTING PERMISSION ERRORS
+
 - Remove .expo from your C:/Users/username directory

@@ -16,12 +16,12 @@ const Tab = createBottomTabNavigator();
 
 const SettingsScreen = () => {
     return(
-      <ScrollView style={{flex: 1,backgroundColor:'white'}}
-          showsVerticalScrollIndicator={false}>
+      // <ScrollView style={{flex: 1,backgroundColor:'white'}}
+      //     showsVerticalScrollIndicator={false}>
 
-        <View>
-          <Text>Hi</Text>
-        </View>
+        // <View>
+        //   <Text>Hi</Text>
+        // </View>
         <Tab.Navigator>
           <Tab.Screen name="Home" component={HomeScreen}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
                 return (
@@ -71,7 +71,7 @@ const SettingsScreen = () => {
           
         </Tab.Navigator>
         
-      </ScrollView>
+      // </ScrollView>
 
     )
 }

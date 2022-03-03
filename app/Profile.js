@@ -1,172 +1,130 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import reactDom from 'react-dom';
-import {StyleSheet, Input, View, Button, ScrollView, ImageBackground, Dimensions, Text, TextInput, StatusBar, TouchableOpacity, TouchableWithoutFeedback, ListViewComponent} from "react-native"
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SearchBar } from 'react-native-elements';
-import SignIn from './SignInScreen';
-import SettingsScreen from './SettingsScreen';
-import HomeScreen from './HomeScreen';
 
-const Profile = ({navigation}) => {
+   
+import React from 'react';
+import {View, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  Avatar,
+  Title,
+  Caption,
+  Text,
+  TouchableRipple,
+} from 'react-native-paper';
 
-    return (
-      <ScrollView style={{flex: 1,backgroundColor:'white'}}
-          showsVerticalScrollIndicator={false}>
-        <View>
-          <Text style={styles.createText}>
-            PROFILE Page
-          </Text>
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+
+
+
+const Profile = () => {
+
+
+  return (
+    <SafeAreaView style={styles.container}>
+
+      <View style={styles.userInfoSection}>
+        <View style={{flexDirection: 'row', marginTop: 15}}>
+          <Avatar.Image 
+            source={{
+              uri: 'https://api.adorable.io/avatars/80/abott@adorable.png',
+            }}
+            size={80}
+          />
+          <View style={{marginLeft: 20}}>
+            <Title style={[styles.title, {
+              marginTop:15,
+              marginBottom: 5,
+            }]}>Team Impolse</Title>
+            <Caption style={styles.caption}>@im_polse</Caption>
+          </View>
         </View>
-        {/* <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-              return (
-                <Image
-                  style={{ width: size, height: size }}
-                  source={{
-                    uri:
-                      'https://img.icons8.com/color-glass/48/000000/home.png',
-                  }}
-                />
-              );
-            }, }} />
-        <Tab.Screen name="Notifications" component={Notifications}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-              return (
-                <Image
-                  style={{ width: size, height: size }}
-                  source={{
-                    uri:
-                      'https://img.icons8.com/color-glass/48/000000/appointment-reminders.png',
-                  }}
-                />
-              );
-            },  }} />
-        <Tab.Screen name="Upload" component={Upload}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-              return (
-                <Image
-                  style={{ width: size, height: size }}
-                  source={{
-                    uri:
-                      'https://img.icons8.com/color-glass/48/000000/camera.png',
-                  }}
-                />
-              );
-            },  }} />
-        <Tab.Screen name="Profile" component={Profile}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-              return (
-                <Image
-                  style={{ width: size, height: size }}
-                  source={{
-                    uri:
-                      'https://img.icons8.com/color/48/000000/user.png',
-                  }}
-                />
-              );
-            },  }} />
+        <View style={styles.menuItem}>
+            <Icon name="heart-outline" color="orange" size={25}/>
+            <Text style={styles.menuItemText}>Total Votes</Text>
+            <Text style={styles.menuItemText}>1200 Votes</Text>
+          </View>
+         <View style={styles.menuItem}>
+            <Icon name="poll" color="#orange" size={25}/>
+            <Text style={styles.menuItemText}> Published Polls</Text>
+          </View>
+      </View>
 
-        
-        </Tab.Navigator> */}
-      </ScrollView>
-    )
-}
 
-const styles = StyleSheet.create({
 
-  checkMark: {
-    flex: 0.3,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems:'center',
-    paddingBottom:70,
-    marginTop:0
-  },
+      <View style={styles.menuWrapper}>
+        <TouchableRipple onPress={() => {}}>
+          <View style={styles.menuItem}>
+            <Icon name="heart-outline" color="#FF6347" size={25}/>
+            <Text style={styles.menuItemText}>Total Votes</Text>
+            <Text style={styles.menuItemText}>1200 Votes</Text>
+          </View>
+        </TouchableRipple>
+        <TouchableRipple onPress={() => {}}>
+          <View style={styles.menuItem}>
+            <Icon name="poll" color="#FF6347" size={25}/>
+            <Text style={styles.menuItemText}> Published Polls</Text>
+          </View>
+        </TouchableRipple>
 
-  signUpButton: {
-    
-    width: '100%',
-    height: 35,
-    alignItems: 'center',
-    //backgroundColor:'black',
-    borderRadius:40,
-    paddingBottom:0,
-    marginTop:20
-},
-
-  TextInput: {
-    height: 50,
-    flex: 1,
-    padding: 5,
-    letterSpacing:2,
-    fontSize:12,
-    textAlign: 'auto'
-  },
-
-  inputView: {
-    backgroundColor: "whitesmoke",
-    flexDirection:'row',
-    borderRadius: 50,
-    width: "110%",
-    height: 45,
-    marginBottom: 20,
-    alignItems: "center",
-    borderTopRightRadius:150,
-    borderTopLeftRadius:250,
-    borderBottomLeftRadius:250,
-    borderBottomRightRadius:230,
-    //textAlign: 'center'
-    
-  },
-  passView: {
-    backgroundColor: "whitesmoke",
-    flexDirection:'row',
-    borderRadius: 50,
-    width: "108%",
-    height: 45,
-    marginBottom: 20,
-    alignItems: "center",
-    borderTopRightRadius:100,
-    borderTopLeftRadius:250,
-    borderBottomLeftRadius:200,
-    borderBottomRightRadius:300,
-    //textAlign: 'center'
-    
-  },
-
-  phoneInput: {
-    backgroundColor: "whitesmoke",
-    flexDirection:'row',
-    borderRadius: 350,
-    width: "100%",
-    height: 45,
-    marginBottom: 0,
-    borderTopRightRadius:150,
-    borderTopLeftRadius:250,
-    borderBottomLeftRadius:200,
-    borderBottomRightRadius:350,
-    alignItems: "center",
-    //textAlign: 'center'
-    
-  },
-  createText: {
-    color: 'black',
-    fontSize: 30,
-    fontWeight: 'bold',
-    letterSpacing:2,
-    textAlign:'center',
-    paddingTop:0
-  },
-  middleBlob: {
-    flex: 1.5,
-    backgroundColor: 'orange',
-    bottom: 0,
-    borderTopStartRadius: 430,  
-    borderTopEndRadius: 120,    
-    borderBottomStartRadius:440,  
-    borderBottomEndRadius:720,    
-    marginTop: 30, 
-  }
-  
-});
+        <TouchableRipple onPress={() => {}}>
+          <View style={styles.menuItem}>
+            <Icon name="settings-outline" color="#FF6347" size={25}/>
+            <Text style={styles.menuItemText}>Settings</Text>
+          </View>
+        </TouchableRipple>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 export default Profile;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  userInfoSection: {
+    paddingHorizontal: 30,
+    marginBottom: 25,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  caption: {
+    fontSize: 14,
+    lineHeight: 14,
+    fontWeight: '500',
+  },
+  row: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  infoBoxWrapper: {
+    borderBottomColor: '#dddddd',
+    borderBottomWidth: 1,
+    borderTopColor: '#dddddd',
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    height: 100,
+  },
+  infoBox: {
+    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  menuWrapper: {
+    marginTop: 10,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+  },
+  menuItemText: {
+    color: '#777777',
+    marginLeft: 20,
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: 26,
+  },
+});
