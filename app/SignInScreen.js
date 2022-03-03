@@ -40,7 +40,7 @@ const SignInScreen = ({navigation}) => {
       }
 
       console.error(error);
-    });
+    })
   }
 
   return (

@@ -9,7 +9,6 @@ import { SearchBar } from 'react-native-elements';
 import SignIn from './SignInScreen';
 import SettingsScreen from './SettingsScreen';
 import HomeScreen from './HomeScreen';
-
 const Profile = ({navigation}) => {
 
     return (

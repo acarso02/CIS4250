@@ -6,6 +6,7 @@ import HomeScreen from './HomeScreen';
 import SignInScreen from './SignInScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import auth from '@react-native-firebase/auth';
+import { firebase } from '@react-native-firebase/database';
 
 const Register = ({navigation}) => {
 
@@ -14,12 +15,26 @@ const Register = ({navigation}) => {
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
 
-  function createUser(email, password) {
+  async function createUser(email, password, name, number) {
     auth()
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account created & signed in!');
-      //CREATE NEW USER IN REALTIME DATABASE HERE
+      
+      const newReference = firebase
+      .app()
+      .database('https://impollse-default-rtdb.firebaseio.com/')
+      .ref('/users/')
+      .push();
+      console.log('Auto generated key: ', newReference.key);
+
+      newReference
+      .set({
+        email: email,
+        phone: number,
+        username: name
+      })
+      .then(() => console.log('Saved in Realtime Database!'));
       navigation.navigate(HomeScreen);
     })
     .catch(error => {
@@ -37,7 +52,8 @@ const Register = ({navigation}) => {
       }
 
       console.error(error);
-    });
+    })
+    
   }
 
   return (
@@ -124,7 +140,7 @@ const Register = ({navigation}) => {
           </View>
 
           <View style={styles.signUpButton}> 
-            <Button onPress={() => createUser(email, password)}
+            <Button onPress={() => createUser(email, password, name, number)}
                     style={styles.buttonText} 
                     title = "Create" 
                     color='black' />
