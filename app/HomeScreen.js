@@ -13,6 +13,7 @@ import SettingsScreen from './SettingsScreen';
 import Notifications from './Notifications';
 import Profile from './Profile';
 import Upload from './Upload';
+import Card from './card';
 
 const HomeScreen = ({navigation}) => {
 
@@ -90,7 +91,7 @@ const HomeScreen = ({navigation}) => {
   }
 
   return (
-    <ScrollView style={{flex: 1,backgroundColor:'white'}}
+    <ScrollView style={styles.scrollArea}
     showsVerticalScrollIndicator={false}>
       <View> 
         <SearchBar
@@ -99,7 +100,12 @@ const HomeScreen = ({navigation}) => {
           />
       </View>
 
+      
+
       <View style={styles.background}>
+        <Card />
+        <Card />
+        <Card />
         
         <StatusBar style="auto" />
 
@@ -112,9 +118,7 @@ const HomeScreen = ({navigation}) => {
           <Image 
             style={styles.logo}
             source={{uri:image.uri}}
-          /> */}
-
-        </View> */}
+          /></View> */}
 
         <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
 
@@ -123,10 +127,6 @@ const HomeScreen = ({navigation}) => {
         <Button title = "Settings" color="black" onPress={() =>{console.log(user)}}> </Button>
         <Button title = "Notifications" color="black" onPress={() =>{navigation.navigate(Notifications)}}> </Button>
         <Button title = "Profile" color="black" onPress={() =>{navigation.navigate(Profile)}}> </Button>
-  
-        <TouchableOpacity>
-          <Text style={styles.forgot_button}>Forgot Password?</Text>
-        </TouchableOpacity>
     
       </View>
       
@@ -139,13 +139,20 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: 'seashell',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: '#E65300'
+  },
+  scrollArea: {
+    flex: 1, 
+    backgroundColor: '#E65300',
   },
   container: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: '#E65300'
   },
  
   logo: {
@@ -174,18 +181,6 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
-  },
- 
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
-    marginLeft: 150,
-    alignItems: "center",
-  },
-
-    loginButton: {
-    width: '100%',
-    height: 100,
   },
  
   loginBtn: {

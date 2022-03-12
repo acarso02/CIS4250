@@ -12,6 +12,7 @@
 - npm install @react-native-firebase/app
 - npm install @react-native-firebase/auth
 - npm install @react-native-firebase/storage
+- npm install @react-native-firebase/database
 - npm install @react-navigation/bottom-tabs
 - npm install @react-navigation/native
 - npm install @react-navigation/native-stack
