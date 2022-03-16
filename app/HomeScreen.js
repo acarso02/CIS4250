@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
-import {StyleSheet, Image, Input, View, Button, ScrollView, ImageBackground, Dimensions, Text, TextInput, StatusBar, TouchableOpacity, TouchableWithoutFeedback, ListViewComponent} from "react-native"
+import {StyleSheet, Modal, Image, Input, View, Button, 
+        Pressable, ScrollView, ImageBackground, Dimensions, 
+        Text, TextInput, StatusBar, TouchableOpacity, 
+        TouchableWithoutFeedback, ListViewComponent} from "react-native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SearchBar } from 'react-native-elements';
+
+import { utils } from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import database from '@react-native-firebase/database';
+
 import SignInScreen from './SignInScreen';
 import SettingsScreen from './SettingsScreen';
 import Notifications from './Notifications';
 import Profile from './Profile';
 import Upload from './Upload';
-import auth from '@react-native-firebase/auth';
-
-
+import PollDetails from './PollDetails';
 
 const HomeScreen = ({navigation}) => {
 
   //const image = {uri: "https://toppng.com/uploads/preview/orange-splat-orange-paint-splash-11562922076goctvo3zry.png"};
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  /*This must be imported into each screen so that we can access the logged-in user at any time*/
+  /*Creates a user listener to hold the state of the user*/
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
@@ -30,16 +36,15 @@ const HomeScreen = ({navigation}) => {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
     if (initializing)
       setInitializing(false);
   }
-  /* ----------------------------------------------------------------------------------------- */
-
+  
   if (initializing) return null;
 
+  /* Signs the user out of the app and returns to the signin page */
   function signOut(){
 
     if(user){
@@ -57,9 +62,13 @@ const HomeScreen = ({navigation}) => {
     
   }
 
+  //IMPORTANT TO LEARN MAPPING STATEMENTS AND HOW THEY CAN BE USED
+  //imageList.map(image => (<Text>Name:{image.fileName}</Text>))
+
   return (
     <ScrollView style={{flex: 1,backgroundColor:'white'}}
     showsVerticalScrollIndicator={false}>
+      
       <View> 
         <SearchBar
           placeholder='Search'
@@ -70,68 +79,26 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.background}>
         
         <StatusBar style="auto" />
-        
+
+              
+        <Button title = "Create Poll" color="green" onPress={() =>{navigation.navigate(Upload)}}> </Button>
+        <Button title = "Settings" color="teal" onPress={() =>{navigation.navigate(SettingsScreen)}}> </Button>
+        <Button title = "Notifications" color="purple" onPress={() =>{console.log(user)/*navigation.navigate(Notifications)}*/}}> </Button>
+        <Button title = "Profile" color="blue" onPress={() =>{navigation.navigate(Profile)}}> </Button>
+        <Button 
+          title = "MyPoll" 
+          color="black" 
+          onPress={() => {
+            navigation.navigate('PollDetails',{
+              id: '-MyFTS4sQw6PtR7talMm',
+            });
+          }}
+        />
+
         <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
-
-        <Button title = "Click ME!" color="black" onPress={() =>{console.log(user)}}> </Button>
-
-        <Button title = "Settings" color="black" onPress={() =>{navigation.navigate(SettingsScreen)}}> </Button>
-        <Button title = "Notifications" color="black" onPress={() =>{navigation.navigate(Notifications)}}> </Button>
-        <Button title = "Profile" color="black" onPress={() =>{navigation.navigate(Profile)}}> </Button>
-  
-        <TouchableOpacity>
-          <Text style={styles.forgot_button}>Forgot Password?</Text>
-        </TouchableOpacity>
     
       </View>
-      {/* <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color-glass/48/000000/home.png',
-                    }}
-                  />
-                );
-              }, }} />
-          <Tab.Screen name="Notifications" component={Notifications}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color-glass/48/000000/appointment-reminders.png',
-                    }}
-                  />
-                );
-              },  }} />
-          <Tab.Screen name="Upload" component={Upload}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color-glass/48/000000/camera.png',
-                    }}
-                  />
-                );
-              },  }} />
-          <Tab.Screen name="Profile" component={Profile}  options={{ headerShown: false, tabBarIcon: ({size,focused,color}) => {
-                return (
-                  <Image
-                    style={{ width: size, height: size }}
-                    source={{
-                      uri:
-                        'https://img.icons8.com/color/48/000000/user.png',
-                    }}
-                  />
-                );
-              },  }} />
-
-          
-        </Tab.Navigator> */}
+      
     </ScrollView>
   );
 }
@@ -150,8 +117,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
  
-  image: {
-    marginBottom: 40,
+  logo: {
+    width: 200,
+    height: 400,
   },
  
   inputView: {
@@ -197,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 40,
     backgroundColor: "#FF1493",
-  },
+  }
 });
 
 export default HomeScreen;

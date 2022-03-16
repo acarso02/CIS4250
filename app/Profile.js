@@ -9,6 +9,18 @@ import {
   Text,
   TouchableRipple,
 } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import reactDom from 'react-dom';
+import {StyleSheet, Input, View, Button, ScrollView, ImageBackground, Dimensions, Text, TextInput, StatusBar, TouchableOpacity, TouchableWithoutFeedback, ListViewComponent} from "react-native"
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SearchBar } from 'react-native-elements';
+import SignIn from './SignInScreen';
+import SettingsScreen from './SettingsScreen';
+import HomeScreen from './HomeScreen';
+const Profile = ({navigation}) => {
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 

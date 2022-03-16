@@ -12,8 +12,6 @@ import Notifications from './Notifications';
 import Profile from './Profile';
 import Upload from './Upload';
 
-const Tab = createBottomTabNavigator();
-
 const SettingsScreen = () => {
     return(
       // <ScrollView style={{flex: 1,backgroundColor:'white'}}
