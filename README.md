@@ -29,7 +29,7 @@
 - npm install react-native-date-input
 - npm install react-native-progress/Bar
 - npm install react-native-progress
-- npm install 
+- npm install react-native-paper
 
 
 
