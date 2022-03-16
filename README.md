@@ -30,6 +30,7 @@
 - npm install react-native-progress/Bar
 - npm install react-native-progress
 - npm install react-native-paper
+- npm install react-native-vector-icons/MaterialCommunityIcons
 
 
 

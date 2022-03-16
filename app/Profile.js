@@ -47,8 +47,8 @@ const Profile = ({navigation}) => {
             <Text style={styles.menuItemText}>1200 Votes</Text>
           </View>
          <View style={styles.menuItem}>
-            <Icon name="poll" color="#orange" size={25}/>
-            <Text style={styles.menuItemText}> Published Polls</Text>
+            <Icon name="poll" color="orange" size={25}/>
+            <Text style={styles.menuItemText}>0 Published Polls</Text>
           </View>
       </View>
 
@@ -71,7 +71,7 @@ const Profile = ({navigation}) => {
 
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
-            <Icon name="settings-outline" color="#FF6347" size={25}/>
+            <Icon name="cog-outline" color="#FF6347" size={25}/>
             <Text style={styles.menuItemText}>Settings</Text>
           </View>
         </TouchableRipple>
