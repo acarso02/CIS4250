@@ -49,8 +49,8 @@ const SignInScreen = ({navigation}) => {
       
       {/* Top View of the Brand */}
       <View style={styles.brandView}>
-        <Ionicons name="checkmark-done-circle-sharp" size={140} color="orange" />
-        
+        <Text style={styles.titleText}>ImPollse</Text>
+        <Ionicons style={styles.shadow} name="checkmark-done-circle-sharp" size={140} color="#00A6C2" />
       </View>
 
       {/* Bottom/Welcome View of Brand*/}
@@ -60,7 +60,7 @@ const SignInScreen = ({navigation}) => {
           <Text style={{color: 'black',fontSize:34, letterSpacing: 1.5,fontWeight:'bold'}}>Hello</Text>
           <Text>
           
-            <Text style={{color:'black',letterSpacing: 2,fontSize: 15,}}>Sign in to your account</Text>
+            <Text style={{color:'black',fontWeight: 'bold',letterSpacing: 2,fontSize: 15,}}>Sign in to your account</Text>
           </Text>
 
           {/* Form Email input View */}
@@ -72,7 +72,7 @@ const SignInScreen = ({navigation}) => {
             <TextInput
             style={styles.TextInput}
             placeholder="Email"
-            placeholderTextColor="grey"
+            placeholderTextColor="#C9C9C9"
             
             onChangeText={(email) => setEmail(email)}
             
@@ -91,7 +91,7 @@ const SignInScreen = ({navigation}) => {
               style={styles.TextInput}
               placeholder="Password"
             
-              placeholderTextColor="grey"
+              placeholderTextColor="#C9C9C9"
               secureTextEntry={true}
               //inlineImageLeft="search_icon"
               onChangeText={(password) => setPassword(password)}
@@ -103,7 +103,7 @@ const SignInScreen = ({navigation}) => {
           </TouchableOpacity>
 
           <View style={styles.loginButton}> 
-            <Button style={styles.buttonText}title = "Log In" color='black' onPress={() =>{logIn(email, password)}}> </Button>
+            <Button style={styles.buttonText}title = "Log In" color='#F51007' onPress={() =>{logIn(email, password)}}> </Button>
           </View>
 
         </View>
@@ -121,13 +121,6 @@ const SignInScreen = ({navigation}) => {
       </View>
     </ScrollView>
   );
-  // }
-
-  // return (
-  //   <View>
-  //     {navigation.navigate(HomeScreen)}
-  //   </View>
-  // );
 
 }
 
@@ -137,7 +130,7 @@ const styles  = StyleSheet.create({
 
   
   inputView: {
-    backgroundColor: "whitesmoke",
+    backgroundColor: "#565653",
     flexDirection:'row',
     borderRadius: 30,
     width: "100%",
@@ -145,6 +138,13 @@ const styles  = StyleSheet.create({
     marginBottom: 20,
     alignItems: "center",
     
+  },
+
+  titleText: {
+    color: 'black',
+    fontSize: 40,
+    fontWeight: 'bold',
+    // textTransform: 'uppercase',
   },
   
   createAccount: {
@@ -193,7 +193,7 @@ const styles  = StyleSheet.create({
     flex:1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'white',
+    backgroundColor:'white'
   },
   
   brandViewText: {
@@ -205,13 +205,14 @@ const styles  = StyleSheet.create({
 
   bottomView:{
     flex: 1.5,
-    backgroundColor: 'orange',
+    backgroundColor: '#E65400',
     bottom: 0,
     borderTopStartRadius: 230,
     borderTopEndRadius: 780,
     borderBottomStartRadius:940,
     borderBottomEndRadius:720,
     marginTop: 50,
+    elevation: 5
   },
 
   TextInput: {
@@ -219,10 +220,20 @@ const styles  = StyleSheet.create({
     flex: 1,
     padding: 5,
     letterSpacing:2,
-    fontSize:12
+    fontSize:12,
+    color: '#C9C9C9'
   },
- 
 
-  
+  shadow: {
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    // Android
+    shadowOffset: {
+        width: 10,            // Same rules apply from above
+        height: 1,           // Can't both be 0
+    },
+    elevation: 100
+  }
 
 })

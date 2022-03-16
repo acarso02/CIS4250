@@ -11,7 +11,7 @@ import SettingsScreen from './app/SettingsScreen';
 import Notifications from './app/Notifications';
 import Profile from './app/Profile';
 import Upload from './app/Upload';
-
+import PollDetails from './app/PollDetails';
 
 //import Tabs from './navigation/tabs';
 
@@ -20,19 +20,20 @@ const Tab = createBottomTabNavigator();
 
 export default () => (
   <NavigationContainer>
-      <Stack.Navigator>
+    <Stack.Navigator>
 
-        <Stack.Screen name="SignInScreen" component={SignInScreen} options = {{headerShown:false}} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} options = {{title: 'Home'}}/>
-        <Stack.Screen name="Register" component={Register} options = {{headerShown: false}}/>
-        <Stack.Screen name="SettingsScreen" component={SettingsScreen} options = {{title: 'SettingsScreen'}}/>
-        <Stack.Screen name="Notifications" component={Notifications} options = {{title: 'Notifications'}}/>
-        <Stack.Screen name="Profile" component={Profile} options = {{title: 'Profile'}}/>
-        <Stack.Screen name="Upload" component={Upload} options = {{title: 'Upload'}}/>
+      <Stack.Screen name="SignInScreen" component={SignInScreen} options = {{headerShown:false}} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} options = {{title: 'Home'}}/>
+      <Stack.Screen name="Register" component={Register} options = {{headerShown: false}}/>
+      <Stack.Screen name="SettingsScreen" component={SettingsScreen} options = {{title: 'SettingsScreen'}}/>
+      <Stack.Screen name="Notifications" component={Notifications} options = {{title: 'Notifications'}}/>
+      <Stack.Screen name="Profile" component={Profile} options = {{title: 'Profile'}}/>
+      <Stack.Screen name="Upload" component={Upload} options = {{title: 'New Poll'}}/>
+      <Stack.Screen name="PollDetails" component={PollDetails} options = {{title: 'Poll'}}/>
 
-      </Stack.Navigator>
+    </Stack.Navigator>
 
-    </NavigationContainer>
+  </NavigationContainer>
 );
 
 

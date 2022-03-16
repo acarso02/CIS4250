@@ -2,57 +2,75 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
 import {StyleSheet, View, Button, ScrollView, Text, TextInput, StatusBar, TouchableOpacity} from "react-native"
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { utils } from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import database from '@react-native-firebase/database';
 import HomeScreen from './HomeScreen';
 import SignInScreen from './SignInScreen';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import auth from '@react-native-firebase/auth';
-import { firebase } from '@react-native-firebase/database';
 
 const Register = ({navigation}) => {
 
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
 
-  async function createUser(email, password, name, number) {
-    auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      console.log('User account created & signed in!');
-      
-      const newReference = firebase
-      .app()
-      .database('https://impollse-default-rtdb.firebaseio.com/')
-      .ref('/users/')
-      .push();
-      console.log('Auto generated key: ', newReference.key);
+  async function createUser(email, password, username, number) {
 
-      newReference
-      .set({
-        email: email,
-        phone: number,
-        username: name
+    if (email && password && username && number){
+      auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+
+        auth()
+        .currentUser
+        .updateProfile({displayName: username, phoneNumber: number})
+        .then(() =>{
+            console.log("Username set to "+ username);
+        }, function (error) {
+            console.log("Error happened");
+        });
+        
+        // const newReference = firebase
+        // .app()
+        // .database('https://impollse-default-rtdb.firebaseio.com/')
+        // .ref('/users/')
+        // .push();
+        // console.log('Auto generated key: ', newReference.key);
+
+        // newReference
+        // .set({
+        //   email: email,
+        //   phone: number,
+        //   username: username
+        // })
+        // .then(() => console.log('Saved in Realtime Database!'));
+        navigation.navigate(HomeScreen);
       })
-      .then(() => console.log('Saved in Realtime Database!'));
-      navigation.navigate(HomeScreen);
-    })
-    .catch(error => {
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
-        alert('That email address is already in use!');
-      }
-      else if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
-        alert('That email address is invalid!');
-      }
-      else if (error.code === 'auth/weak-password') {
-        console.log('The password is too weak, and requires a minimum of 6 characters.');
-        alert('The password is too weak, and requires a minimum of 6 characters.');
-      }
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+          alert('That email address is already in use!');
+        }
+        else if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+          alert('That email address is invalid!');
+        }
+        else if (error.code === 'auth/weak-password') {
+          console.log('The password is too weak, and requires a minimum of 6 characters.');
+          alert('The password is too weak, and requires a minimum of 6 characters.');
+        }
 
-      console.error(error);
-    })
+        console.error(error);
+      })
+    }
+    else{
+      console.log("Error, Missing Fields: ");
+      alert('Error - Missing Fields: \n'+(username?'':'Username\n')+(email?'':'Email\n')+(password?'':'Password\n')+(number?'':'Phone number\n'));
+    }
     
   }
 
@@ -79,10 +97,10 @@ const Register = ({navigation}) => {
             </View>
             <TextInput
             style={styles.TextInput}
-            placeholder="Name"
+            placeholder="Username"
             placeholderTextColor="grey"
             
-            onChangeText={(name) => setName(name)}
+            onChangeText={(name) => setUsername(name)}
             
             />
 
@@ -140,7 +158,7 @@ const Register = ({navigation}) => {
           </View>
 
           <View style={styles.signUpButton}> 
-            <Button onPress={() => createUser(email, password, name, number)}
+            <Button onPress={() => createUser(email, password, username, number)}
                     style={styles.buttonText} 
                     title = "Create" 
                     color='black' />
