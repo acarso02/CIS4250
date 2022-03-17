@@ -68,6 +68,13 @@ const HomeScreen = ({navigation}) => {
   
   if (initializing) return null;
 
+  // let arr = []
+
+  // querySnapshot.forEach(documentSnapshot => {
+  //   arr.push(<View>data</View>)
+  // })
+
+
   /* Signs the user out of the app and returns to the signin page */
   function signOut(){
 
@@ -122,7 +129,8 @@ const HomeScreen = ({navigation}) => {
 
         <Button title = "Create Poll" color="green" onPress={() =>{navigation.navigate(Upload)}}> </Button>
         <Button title = "Settings" color="teal" onPress={() =>{navigation.navigate(SettingsScreen)}}> </Button>
-        <Button title = "Notifications" color="purple" onPress={() =>{console.log(user)/*navigation.navigate(Notifications)}*/}}> </Button>
+        <Button title = "Notifications" color="purple" onPress={() =>{navigation.navigate(Notifications)}}> </Button>
+        <Button title = "user" color="purple" onPress={() =>{console.log(user)}}> </Button>
         <Button title = "Profile" color="blue" onPress={() =>{navigation.navigate(Profile)}}> </Button>
         <Button 
           title = "MyPoll" 

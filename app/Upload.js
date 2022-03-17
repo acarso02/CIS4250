@@ -19,16 +19,21 @@ import PollDetails from './PollDetails';
 import { utils } from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
-import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 
 const Upload = ({navigation}) => {
 
   const [progress, setProgress] = useState(0);
+  const [queryLength, setQueryLength] = useState(0);
   const [title, setTitle] = useState('');
   /* NOTE: TAGS MUST BE CHANGED TO DB ENTRY VERSION ASAP */
   // const [tags, setTags] = useState([]);
   const [tags, setTags] = useState('');
-  const [endDate, setEndDate] = useState('24 Hours');
+  const today = new Date()
+  const tomorrow = new Date(today)
+  tomorrow.setDate(tomorrow.getDate())
+  tomorrow.setHours(0,0,0,0);
+  const [endDate, setEndDate] = useState(tomorrow);
   const [imageList, setImageList] = useState([]); 
   const [uniqueKey, setUniqueKey] = useState('');
   const [createPostModalVisible, setCreatePostModalVisible] = useState(false);
@@ -75,30 +80,67 @@ const Upload = ({navigation}) => {
 
   function createPoll() {
 
+    firestore()
+    .collection('polls')
+    .get()
+    .then(querySnapshot => {
+      console.log('Total users: ', querySnapshot.size);
+      setQueryLength(querySnapshot.size + 1);
+
+      querySnapshot.forEach(documentSnapshot => {
+        console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
+      });
+    });
+
     console.log(user.displayName, title, endDate, tags, enabledComments, imageList[0].fileName, imageList[1].fileName)
     
     let reference = storage().ref("Poll-Images/"+imageList[0].fileName);
     let task = reference.putFile(imageList[0].uri);
 
+    console.log(queryLength);
+
     task.then(() => {
 
       console.log('Image 1 uploaded to the bucket!');
 
-      const newReference = 
-        database()
-        .ref('/Polls/')
-        .push();
-      console.log('Auto generated key: ', newReference.key);
-      setUniqueKey(newReference.key);
-      console.log(uniqueKey)
+      // const newReference = 
+      //   database()
+      //   .ref('/Polls/')
+      //   .push();
+      // console.log('Auto generated key: ', newReference.key);
+      // setUniqueKey(newReference.key);
+      // console.log(uniqueKey);
 
-      const comments = enabledComments?[{user:"No User",comment:"",date:""}]:null;
+      // newReference
+      // .set({
+      //   User: user.displayName,
+      //   Title: title,
+      //   PollLength: endDate,
+      //   Tags: tags,
+      //   Comments: comments,
+      //   Images: {
+      //     Image1: {
+      //       Votes: 0,
+      //       imageName: imageList[0].fileName
+      //     },
+      //     Image2: {
+      //       Votes: 0,
+      //       imageName: imageList[1].fileName
+      //     }
+      //   }
+      // })
 
-      newReference
+      const comments = enabledComments?[{user:"default",comment:"",date:""}]:null;
+      const len = queryLength + '';
+      console.log(len);
+
+      firestore()
+      .collection('polls')
+      .doc(len)
       .set({
         User: user.displayName,
         Title: title,
-        PollLength: endDate,
+        PollLength: new Date(firestore.Timestamp.now().seconds*1000).toLocaleDateString(),
         Tags: tags,
         Comments: comments,
         Images: {
@@ -163,8 +205,8 @@ const Upload = ({navigation}) => {
               style={{ height: 50, width: 150 }}
               onValueChange={(itemValue, itemIndex) => setEndDate(itemValue)}
             >
-              <Picker.Item label="24 Hours" value={new Date()} />
-              <Picker.Item label="2 Days" value="2 Days" />
+              <Picker.Item label="24 Hours" value={tomorrow} />
+              <Picker.Item label="2 Days" value={tomorrow.setDate(tomorrow.getDate() + 2)} />
             </Picker>
           </View>
           {/*Tags input*/}
@@ -190,6 +232,7 @@ const Upload = ({navigation}) => {
         </View>
         <View style={styles.bottomButton}>
           <Button title = "Next Page" color="black" onPress={() =>{title?setProgress(50):alert(`Please provide a title to continue`)}}> </Button>
+          <Button title = "hi" color="black" onPress={() =>{console.log(tomorrow)}}> </Button>
         </View>
       </View>
     )
