@@ -13,6 +13,7 @@ import { utils } from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 
 import SignInScreen from './SignInScreen';
 import SettingsScreen from './SettingsScreen';
@@ -20,12 +21,16 @@ import Notifications from './Notifications';
 import Profile from './Profile';
 import Upload from './Upload';
 import PollDetails from './PollDetails';
+import Card from './card';
+import { render } from 'react-dom';
 
 const HomeScreen = ({navigation}) => {
 
   //const image = {uri: "https://toppng.com/uploads/preview/orange-splat-orange-paint-splash-11562922076goctvo3zry.png"};
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [pollArr, setPollArr] = useState([]);
+  
 
   /*Creates a user listener to hold the state of the user*/
   const [initializing, setInitializing] = useState(true);
@@ -33,13 +38,32 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+
+    getPolls();
     return subscriber; // unsubscribe on unmount
-  }, []);
+  }, []); 
 
   function onAuthStateChanged(user) {
     setUser(user);
     if (initializing)
       setInitializing(false);
+  } 
+
+  function getPolls(){ 
+      var tempArr = []; 
+      firestore()
+      .collection('polls')
+      .get() 
+      .then(querySnapshot => {
+      console.log('Total polls: ', querySnapshot.size)
+      
+      querySnapshot.forEach(documentSnapshot => {
+        tempArr.push(documentSnapshot.data());
+        console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+        
+      });
+      setPollArr(tempArr);     
+    }); 
   }
   
   if (initializing) return null;
@@ -74,20 +98,33 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <ScrollView style={{flex: 1,backgroundColor:'white'}}
-    showsVerticalScrollIndicator={false}>
+    showsVerticalScrollIndicator={false}> 
       
       <View> 
         <SearchBar
-          placeholder='Search'
+          placeholder='Search' 
           textFieldBackgroundColor='blue'
           />
       </View>
+
+      <View style={{alignItems: 'center', marginVertical: 20}}> 
+        {pollArr.map((p, k) => {
+          console.log("to component: " + p.Title); 
+          return (
+            <Card 
+              key={k}
+              title={p.Title} 
+              tag={p.Tags}
+              image1Name={p.Images.Image1.imageName}
+              image2Name={p.Images.Image2.imageName}/>
+          );
+        })}
+      </View> 
 
       <View style={styles.background}>
         
         <StatusBar style="auto" />
 
-              
         <Button title = "Create Poll" color="green" onPress={() =>{navigation.navigate(Upload)}}> </Button>
         <Button title = "Settings" color="teal" onPress={() =>{navigation.navigate(SettingsScreen)}}> </Button>
         <Button title = "Notifications" color="purple" onPress={() =>{navigation.navigate(Notifications)}}> </Button>
@@ -109,6 +146,7 @@ const HomeScreen = ({navigation}) => {
       
     </ScrollView>
   );
+  
 }
 
 const styles = StyleSheet.create({
