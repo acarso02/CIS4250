@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text,  View, Dimensions, Image, Button, TouchableOpacity, TouchableHighlight } from 'react-native';
-import storage from '@react-native-firebase/storage';
+import storage, { FirebaseStorageTypes } from '@react-native-firebase/storage';
 import { firebase } from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const Card = (props) => {
   const [image1Url, setImage1Url] = useState(undefined);
   const [image2Url, setImage2Url] = useState(undefined);
+
+  const [image1Votes, setImage1Votes] = useState(0);
+  const [image2Votes, setImage2Votes] = useState(0);
 
   //I'm so sorry about how bad of a solution this is.. its 3am
   function getImage1(){
@@ -50,12 +54,16 @@ const Card = (props) => {
           <Image style={styles.imageStyle} source={{uri: image2Url}}/>
         </TouchableOpacity>
       </View>
+      <View style={styles.votesContainer}>
+        <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>{props.im1Votes}</Text>
+        <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>{props.im2Votes}</Text>
+      </View>
       <View style={styles.bottomContainer}>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, justifyContent: 'center'}}>
           <Text>{props.username}</Text>
         </View>
         <Button style={styles.buttons} title="VOTE" color="#F51007"></Button>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, justifyContent: 'center'}}>
           <Text style={styles.dateText}>{props.date.toString()}</Text>
         </View>
       </View>
@@ -68,7 +76,7 @@ const styles = StyleSheet.create({
   cardContainer: { 
     width: deviceWidth - 50, 
     backgroundColor: '#aaaaaa',
-    height: 325,
+    height: 350,
     borderRadius: 15,
 
     shadowColor: '#000000',
@@ -126,8 +134,12 @@ const styles = StyleSheet.create({
   },
   dateText: {
     textAlign: 'right',
-    alignSelf: 'flex-end',
     flex: 1
+  },
+  votesContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   }
 });
 
