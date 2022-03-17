@@ -4,18 +4,31 @@ import storage from '@react-native-firebase/storage';
 import { firebase } from '@react-native-firebase/auth';
 
 const Card = (props) => {
-  const [image1Url, setImageUrl] = useState(undefined);
+  const [image1Url, setImage1Url] = useState(undefined);
+  const [image2Url, setImage2Url] = useState(undefined);
 
-  function getImage(name){
+  //I'm so sorry about how bad of a solution this is.. its 3am
+  function getImage1(){
     console.log(props.image1Name);
     firebase.storage()
-      .ref('/Poll-Images/' + name)
+      .ref('/Poll-Images/' + props.image1Name)
       .getDownloadURL()
       .then((url) => {
-        setImageUrl(url);
+        setImage1Url(url);
       })
       .catch((e) => console.log('error while getting image ', e));
   }
+  function getImage2(){
+    console.log(props.image2Name);
+    firebase.storage()
+      .ref('/Poll-Images/' + props.image2Name)
+      .getDownloadURL()
+      .then((url) => {
+        setImage2Url(url);
+      })
+      .catch((e) => console.log('error while getting image ', e));
+  }
+
 
   return (
     <View style={styles.cardContainer}> 
@@ -28,13 +41,13 @@ const Card = (props) => {
 
       <View style={styles.imageContainer}>
         <TouchableOpacity >
-          {getImage(props.image1Name)}
+          {getImage1()}
           <Image style={styles.imageStyle} source={{uri: image1Url}}/>
         </TouchableOpacity>
 
         <TouchableOpacity >
-          {getImage(props.image1Name)}
-          <Image style={styles.imageStyle} source={{uri: image1Url}}/>
+          {getImage2()}
+          <Image style={styles.imageStyle} source={{uri: image2Url}}/>
         </TouchableOpacity>
       </View>
       <View style={styles.bottomContainer}>
