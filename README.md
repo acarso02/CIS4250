@@ -27,10 +27,10 @@
 - npm install @react-native-picker/picker
 - npm install react-native-elements
 - npm install react-native-date-input
-- npm install react-native-progress/Bar
 - npm install react-native-progress
 - npm install react-native-paper
 - npm install react-native-vector-icons/MaterialCommunityIcons
+- npm install @react-native-firebase/firestore
 
 
 

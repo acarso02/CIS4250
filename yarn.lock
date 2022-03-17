@@ -2167,6 +2167,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-firebase/database/-/database-14.5.0.tgz"
   "version" "14.5.0"
 
+"@react-native-firebase/firestore@^14.5.1":
+  "integrity" "sha512-7DYFLA3XYxKGkkKxBaEKGKV/p6lsC6ODOwChCAN6ILHKK3gUlSxIPRkr4AKgFjedqzYWZLceMSH6AgOjeSOSyA=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-14.5.1.tgz"
+  "version" "14.5.1"
+
 "@react-native-firebase/storage@^14.5.0":
   "integrity" "sha512-mQxn7KscG5ouNtlkh5sMAGnOqKlDrunuaOmBtrm3e1OT59jgXv4c3SUDDX7KFIsr8oKuh+dD2pg4bb9G2aSKiQ=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-14.5.0.tgz"
