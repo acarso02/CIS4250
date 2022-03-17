@@ -19,7 +19,7 @@ const SettingsScreen = () => {
         showsVerticalScrollIndicator={false}>
 
       <View>
-        <Text>Hi</Text>
+        <Text>SETTINGS</Text>
       </View>
       
     </ScrollView>
