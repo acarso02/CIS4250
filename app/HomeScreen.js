@@ -115,8 +115,12 @@ const HomeScreen = ({navigation}) => {
               key={k}
               title={p.Title} 
               tag={p.Tags}
+              date={p.PollLength}
+              username={p.User}
               image1Name={p.Images.Image1.imageName}
-              image2Name={p.Images.Image2.imageName}/>
+              image2Name={p.Images.Image2.imageName}
+              im1Votes={p.Images.Image1.Votes}
+              im2Votes={p.Images.Image2.Votes}/>
           );
         })}
       </View> 
