@@ -14,15 +14,18 @@ import * as Progress from 'react-native-progress';
 
 import dayjs from 'dayjs';
 import HomeScreen from './HomeScreen';
+import Card from './card';
 
 import { utils } from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import database from '@react-native-firebase/database';
 
 const PollDetails = ({ route, navigation }) => {
 
     const [loading, setLoading] = useState(false);
+    const [pollArr, setPollArr] = useState([]);
     const { id } = route.params;
 
     /*Creates a user listener to hold the state of the user*/
@@ -32,36 +35,33 @@ const PollDetails = ({ route, navigation }) => {
     const [imageUris, setImageUris] = useState([]);
 
     useEffect(() => {
-
-        database()
-        .ref(`/Polls/${id}`)
-        .once('value')
-        .then(snapshot => {
-            console.log(snapshot.val());
-            setPoll(snapshot.val());
-            console.log(loading);
-            setImages();
-        });
-
-        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+      const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+      console.log(auth().currentUser.displayName); 
+      var tempArr = []; 
+      firestore()
+        .collection('polls')
+        .where('User', '==', auth().currentUser.displayName)
+        .get() 
+        .then(querySnapshot => {
+        console.log('Total polls: ', querySnapshot.size)
+      
+      querySnapshot.forEach(documentSnapshot => {
+        tempArr.push(documentSnapshot.data());
+        console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+      });
+        setPollArr(tempArr);     
+      }); 
         return subscriber; // unsubscribe on unmount
     }, []);
 
-    function setImages(){
-
-        database()
-        .ref()
-    }
 
     function onAuthStateChanged(user) {
         setUser(user);
         if (initializing)
         setInitializing(false);
     }
-    
-    if (initializing) return null;
 
-    return(loading?
+    /*return(loading?
         <View>
           <Text style={styles.createText}>
             Title Yeet
@@ -73,11 +73,35 @@ const PollDetails = ({ route, navigation }) => {
           <Button title = "Profile" color="blue" onPress={() => {console.log(poll)}}/>
         </View>
         :<View style={styles.horizontal, styles.container}><Progress.Circle size={100} thickness={1000} indeterminate={true} /></View>
+
+    )*/
+    return(
+
+      <ScrollView style={{flex: 1,backgroundColor:'white'}}
+      showsVerticalScrollIndicator={false}>
+        <Text style={styles.createText}>My Polls:</Text>
+        <View style={{alignItems: 'center', marginVertical: 20}}> 
+            {pollArr.map((p, k) => {
+              console.log("to component: " + p.Title); 
+              return (
+                <Card 
+                  key={k}
+                  title={p.Title} 
+                  tag={p.Tags}
+                  date={p.PollLength}
+                  username={p.User}
+                  image1Name={p.Images.Image1.imageName}
+                  image2Name={p.Images.Image2.imageName}/>
+              );
+            })}
+        </View> 
+
+      </ScrollView>
     )
 
 }
 
-export default PollDetails;
+
 
 const styles  = StyleSheet.create({
 
@@ -110,3 +134,4 @@ const styles  = StyleSheet.create({
         padding: 10
       },
 })
+export default PollDetails;

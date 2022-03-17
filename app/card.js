@@ -55,7 +55,9 @@ const Card = (props) => {
           <Text>{props.username}</Text>
         </View>
         <Button style={styles.buttons} title="VOTE" color="#F51007"></Button>
-        <Text style={styles.dateText}>Mar 5</Text>
+        <View style={{flex: 1}}>
+          <Text style={styles.dateText}>{props.date.toString()}</Text>
+        </View>
       </View>
     </View>
   )
