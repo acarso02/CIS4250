@@ -3,7 +3,7 @@ import reactDom from 'react-dom';
 import {StyleSheet, Modal, Image, Input, View, Button, 
         Pressable, ScrollView, ImageBackground, Dimensions, 
         Text, TextInput, StatusBar, TouchableOpacity, 
-        TouchableWithoutFeedback, ListViewComponent} from "react-native"
+        TouchableWithoutFeedback, ListViewComponent, RefreshControl} from "react-native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -29,8 +29,7 @@ const HomeScreen = ({navigation}) => {
   //const image = {uri: "https://toppng.com/uploads/preview/orange-splat-orange-paint-splash-11562922076goctvo3zry.png"};
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [pollArr, setPollArr] = useState([]);
-  
+  const [pollArr, setPollArr] = useState([]);  
 
   /*Creates a user listener to hold the state of the user*/
   const [initializing, setInitializing] = useState(true);
@@ -51,6 +50,7 @@ const HomeScreen = ({navigation}) => {
 
   function getPolls(){ 
       var tempArr = []; 
+      var tempIDArr = [];
       firestore()
       .collection('polls')
       .get() 
@@ -58,22 +58,15 @@ const HomeScreen = ({navigation}) => {
       console.log('Total polls: ', querySnapshot.size)
       
       querySnapshot.forEach(documentSnapshot => {
-        tempArr.push(documentSnapshot.data());
+        tempArr.push(documentSnapshot);
+
         console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
-        
       });
-      setPollArr(tempArr);     
+      setPollArr(tempArr);    
     }); 
   }
   
   if (initializing) return null;
-
-  // let arr = []
-
-  // querySnapshot.forEach(documentSnapshot => {
-  //   arr.push(<View>data</View>)
-  // })
-
 
   /* Signs the user out of the app and returns to the signin page */
   function signOut(){
@@ -97,33 +90,37 @@ const HomeScreen = ({navigation}) => {
   //imageList.map(image => (<Text>Name:{image.fileName}</Text>))
 
   return (
-    <ScrollView style={{flex: 1,backgroundColor:'white'}}
-    showsVerticalScrollIndicator={false}> 
+    <ScrollView 
+      style={{flex: 1,backgroundColor:'white'}}
+        showsVerticalScrollIndicator={false}
+      refreshControl={<RefreshControl refreshing={false} onRefresh={()=>{getPolls()}} />}> 
       
       <View> 
         <SearchBar
           placeholder='Search' 
           textFieldBackgroundColor='blue'
-          />
+        />
       </View>
 
       <View style={{alignItems: 'center', marginVertical: 20}}> 
         {pollArr.map((p, k) => {
-          console.log("to component: " + p.Title); 
           return (
             <Card 
               key={k}
-              title={p.Title} 
-              tag={p.Tags}
-              date={p.PollLength}
-              username={p.User}
-              image1Name={p.Images.Image1.imageName}
-              image2Name={p.Images.Image2.imageName}
-              im1Votes={p.Images.Image1.Votes}
-              im2Votes={p.Images.Image2.Votes}/>
+              pollID={p.id}
+              title={p.data().Title} 
+              tag={p.data().Tags}
+              date={p.data().PollLength}
+              username={p.data().User}
+              image1Name={p.data().Images.Image1.imageName}
+              image2Name={p.data().Images.Image2.imageName}
+              im1Votes={p.data().Images.Image1.Votes}
+              im2Votes={p.data().Images.Image2.Votes}/>
           );
         })}
       </View> 
+
+      <Button title='Refresh' onPress={() => {getPolls()}}></Button>
 
       <View style={styles.background}>
         
