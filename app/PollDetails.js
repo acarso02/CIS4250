@@ -32,7 +32,7 @@ const PollDetails = ({ route, navigation }) => {
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
     const [poll, setPoll] = useState();
-    const [imageUris, setImageUris] = useState([]);
+    const [imageUrisLoaded, setImageUrisLoad] = useState(false);
 
     useEffect(() => {
       const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
@@ -80,8 +80,11 @@ const PollDetails = ({ route, navigation }) => {
       <ScrollView style={{flex: 1,backgroundColor:'white'}}
       showsVerticalScrollIndicator={false}>
         <Text style={styles.createText}>My Polls:</Text>
+        
         <View style={{alignItems: 'center', marginVertical: 20}}> 
+            
             {pollArr.map((p, k) => {
+
               console.log("to component: " + p.Title); 
               return (
                 <Card 
