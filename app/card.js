@@ -3,11 +3,15 @@ import { StyleSheet, Text,  View, Dimensions, Image, Button, TouchableOpacity, T
 import storage, { FirebaseStorageTypes } from '@react-native-firebase/storage';
 import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import PollHighlight from './PollHighlight';
 
 const Card = (props) => {
   const [image1Url, setImage1Url] = useState(undefined);
   const [image2Url, setImage2Url] = useState(undefined);
   const [selectedImage, setSelectedImage] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     getImage1();
