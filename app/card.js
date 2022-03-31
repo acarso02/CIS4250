@@ -40,23 +40,34 @@ const Card = (props) => {
   }
 
   function castVote() {
-    const ref = firestore()
-    .collection('polls')
-    .doc(props.pollID);
 
-    //will need total query if multiple images implemented
-    if(selectedImage == 1){
-      ref.update({
-        'Images.Image1.Votes': firestore.FieldValue.increment(1)
-      });
+    if(props.votedList.includes(props.userID)){   //user is in the hasVoted list
+      alert('You already voted on that poll')
     }
-    if(selectedImage == 2){
+    else{   //user not in hasVoted list
+      const ref = firestore()
+      .collection('polls')
+      .doc(props.pollID);
+
+      if(selectedImage == 1){
+        ref.update({
+          'Images.Image1.Votes': firestore.FieldValue.increment(1)
+        });
+      }
+      else if(selectedImage == 2){
+        ref.update({
+          'Images.Image2.Votes': firestore.FieldValue.increment(1)
+        });
+      }
+      else{
+        alert('Select an Image First')
+      }
+      //update remote list
       ref.update({
-        'Images.Image2.Votes': firestore.FieldValue.increment(1)
-      });
-    }
-    else{
-      alert('Select an Image First')
+          'Voted': firestore.FieldValue.arrayUnion(props.userID)
+      })
+      //update local list
+      props.votedList.push(props.userID);
     }
   }
 
