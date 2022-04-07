@@ -107,6 +107,7 @@ const HomeScreen = ({navigation}) => {
           return (
             <Card 
               key={k}
+              currentUser={auth().currentUser.uid} //this is the current logged in user
               pollID={p.id}
               title={p.data().Title} 
               tag={p.data().Tags}
@@ -115,7 +116,8 @@ const HomeScreen = ({navigation}) => {
               image1Name={p.data().Images.Image1.imageName}
               image2Name={p.data().Images.Image2.imageName}
               im1Votes={p.data().Images.Image1.Votes}
-              im2Votes={p.data().Images.Image2.Votes}/>
+              im2Votes={p.data().Images.Image2.Votes}
+              votedList={p.data().Voted}/>
           );
         })}
       </View> 
