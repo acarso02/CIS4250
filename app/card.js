@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text,  View, Dimensions, Image, Button, TouchableOpacity, Pressable } from 'react-native';
 import storage, { FirebaseStorageTypes } from '@react-native-firebase/storage';
 import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -13,9 +14,11 @@ const Card = (props) => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    //get images from storage
     getImage1();
     getImage2();
   }, []); 
+
   //I'm so sorry about how bad of a solution this is.. its 3am
   function getImage1(){
     console.log(props.image1Name);
@@ -38,6 +41,7 @@ const Card = (props) => {
       .catch((e) => console.log('error while getting image ', e));
   }
 
+  //vote button onPress
   function castVote() {
 
     if(props.votedList.includes(props.userID)){   //user is in the hasVoted list
@@ -70,6 +74,32 @@ const Card = (props) => {
     }
   }
 
+//Dynamic Styles
+  //base image style off of selection
+  const imageStyle = function(i) {
+    if(i==selectedImage){
+      return {
+        height: 200,
+        width: 150,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        flexDirection: 'row',
+        borderWidth: 5,
+        borderColor: 'black'
+      }
+    }
+    else{
+      return {
+        height: 200,
+        width: 150,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        flexDirection: 'row',
+      }
+    }
+  }
+
+
 
   return (
     <View style={styles.cardContainer}> 
@@ -84,12 +114,10 @@ const Card = (props) => {
       <View style={styles.imageContainer}>
         <TouchableOpacity 
           onPress={() => {setSelectedImage(1)}}>
-          <Image style={styles.imageStyle} source={{uri: image1Url}}/>
           <Image style={imageStyle(1)} source={{uri: image1Url}}/>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => {setSelectedImage(2)}}>
-          <Image style={styles.imageStyle} source={{uri: image2Url}}/>
           <Image style={imageStyle(2)} source={{uri: image2Url}}/>
         </TouchableOpacity>
       </View>
@@ -101,6 +129,7 @@ const Card = (props) => {
       
       <View style={styles.bottomContainer}>
         <View style={{flex: 1, justifyContent: 'center'}}>
+          <Text>{props.username}</Text>
         </View>
         <Button style={styles.buttons} title="VOTE" color="#F51007" onPress={() => {castVote()}}></Button>
         <View style={{flex: 1, justifyContent: 'center'}}>
@@ -111,6 +140,8 @@ const Card = (props) => {
     </View>
   )
 }
+
+
 
 const deviceWidth = Math.round(Dimensions.get('window').width);
 const styles = StyleSheet.create({
@@ -133,13 +164,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginVertical: 10,
     padding: 10
-  },
-  imageStyle: {
-    height: 200,
-    width: 150,
-    marginHorizontal: 10,
-    borderRadius: 10,
-    flexDirection: 'row'
   },
   imageContainer: {
     flexDirection: 'row',
