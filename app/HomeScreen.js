@@ -50,7 +50,6 @@ const HomeScreen = ({navigation}) => {
 
   function getPolls(){ 
       var tempArr = []; 
-      var tempIDArr = [];
       firestore()
       .collection('polls')
       .get() 
