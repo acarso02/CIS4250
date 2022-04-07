@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text,  View, Dimensions, Image, Button, TouchableOpacity, TouchableHighlight, Pressable } from 'react-native';
 import storage, { FirebaseStorageTypes } from '@react-native-firebase/storage';
 import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -86,10 +85,12 @@ const Card = (props) => {
         <TouchableOpacity 
           onPress={() => {setSelectedImage(1)}}>
           <Image style={styles.imageStyle} source={{uri: image1Url}}/>
+          <Image style={imageStyle(1)} source={{uri: image1Url}}/>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => {setSelectedImage(2)}}>
           <Image style={styles.imageStyle} source={{uri: image2Url}}/>
+          <Image style={imageStyle(2)} source={{uri: image2Url}}/>
         </TouchableOpacity>
       </View>
 
@@ -100,7 +101,6 @@ const Card = (props) => {
       
       <View style={styles.bottomContainer}>
         <View style={{flex: 1, justifyContent: 'center'}}>
-          <Text>{selectedImage}</Text>
         </View>
         <Button style={styles.buttons} title="VOTE" color="#F51007" onPress={() => {castVote()}}></Button>
         <View style={{flex: 1, justifyContent: 'center'}}>
@@ -175,7 +175,6 @@ const styles = StyleSheet.create({
   },
   dateText: {
     textAlign: 'right',
-    flex: 1
   },
   votesContainer: {
     width: '100%',
