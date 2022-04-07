@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
   },
   dateText: {
     textAlign: 'right',
-    flex: 1
   },
   votesContainer: {
     width: '100%',
