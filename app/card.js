@@ -44,7 +44,7 @@ const Card = (props) => {
   //vote button onPress
   function castVote() {
 
-    if(props.votedList.includes(props.userID)){   //user is in the hasVoted list
+    if(props.votedList.includes(props.currentUser)){   //user is in the hasVoted list
       alert('You already voted on that poll')
     }
     else{   //user not in hasVoted list
