@@ -152,7 +152,7 @@ const Upload = ({navigation}) => {
             imageName: imageList[1].fileName
           }
         },
-        Voted: []
+        hasVoted: []
       })
       .then(() => {
         console.log('Saved in Realtime Database!');

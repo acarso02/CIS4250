@@ -103,6 +103,7 @@ const HomeScreen = ({navigation}) => {
 
       <View style={{alignItems: 'center', marginVertical: 20}}> 
         {pollArr.map((p, k) => {
+          console.log(auth().currentUser.uid);
           return (
             <Card 
               key={k}
@@ -116,7 +117,7 @@ const HomeScreen = ({navigation}) => {
               image2Name={p.data().Images.Image2.imageName}
               im1Votes={p.data().Images.Image1.Votes}
               im2Votes={p.data().Images.Image2.Votes}
-              votedList={p.data().Voted}/>
+              hasVoted={p.data().hasVoted}/>
           );
         })}
       </View> 

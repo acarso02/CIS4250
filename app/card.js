@@ -6,10 +6,13 @@ import firestore from '@react-native-firebase/firestore';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PollHighlight from './PollHighlight';
+import { render } from 'react-dom';
 
 const Card = (props) => {
   const [image1Url, setImage1Url] = useState(undefined);
   const [image2Url, setImage2Url] = useState(undefined);
+  const [voteCount1, setVoteCount1] = useState(0);
+  const [voteCount2, setVoteCount2] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
   const navigation = useNavigation();
 
@@ -17,6 +20,10 @@ const Card = (props) => {
     //get images from storage
     getImage1();
     getImage2();
+
+    //set the vote counts 
+    setVoteCount1(props.im1Votes);
+    setVoteCount2(props.im2Votes);
   }, []); 
 
   //I'm so sorry about how bad of a solution this is.. its 3am
@@ -44,7 +51,7 @@ const Card = (props) => {
   //vote button onPress
   function castVote() {
 
-    if(props.votedList.includes(props.currentUser)){   //user is in the hasVoted list
+    if(props.hasVoted.includes(props.currentUser)){   //user is in the hasVoted list
       alert('You already voted on that poll')
     }
     else{   //user not in hasVoted list
@@ -56,21 +63,23 @@ const Card = (props) => {
         ref.update({
           'Images.Image1.Votes': firestore.FieldValue.increment(1)
         });
+        setVoteCount1(voteCount1 + 1);
       }
       else if(selectedImage == 2){
         ref.update({
           'Images.Image2.Votes': firestore.FieldValue.increment(1)
         });
+        setVoteCount2(voteCount2 + 1);
       }
       else{
         alert('Select an Image First')
       }
       //update remote list
       ref.update({
-          'Voted': firestore.FieldValue.arrayUnion(props.userID)
+          'hasVoted': firestore.FieldValue.arrayUnion(props.currentUser)
       })
       //update local list
-      props.votedList.push(props.userID);
+      props.hasVoted.push(props.currentUser);
     }
   }
 
@@ -100,12 +109,12 @@ const Card = (props) => {
   }
 
 
-
   return (
-    <View style={styles.cardContainer}> 
+    <View style={styles.cardContainer}>
 
       <View style={styles.titleArea}>
         <Text style={styles.titleText}>{props.title}</Text>
+
         <TouchableOpacity style={styles.tag} >
           <Text style={{flex: 1, margin: 5}}>#{props.tag}</Text>
         </TouchableOpacity>
@@ -117,14 +126,15 @@ const Card = (props) => {
           <Image style={imageStyle(1)} source={{uri: image1Url}}/>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {setSelectedImage(2)}}>
+        <TouchableOpacity 
+          onPress={() => {setSelectedImage(2)}}>
           <Image style={imageStyle(2)} source={{uri: image2Url}}/>
         </TouchableOpacity>
       </View>
 
       <View style={styles.votesContainer}>
-        <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>{props.im1Votes}</Text>
-        <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>{props.im2Votes}</Text>
+        <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>{voteCount1}</Text>
+        <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>{voteCount2}</Text>
       </View>
       
       <View style={styles.bottomContainer}>
