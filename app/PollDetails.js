@@ -116,6 +116,7 @@ const styles  = StyleSheet.create({
         fontWeight: 'bold',
         letterSpacing:2,
         textAlign:'center',
+
     },
     imagePane: {
         width: '98%',
