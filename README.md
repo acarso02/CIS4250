@@ -31,6 +31,7 @@
 - npm install react-native-paper
 - npm install react-native-vector-icons/MaterialCommunityIcons
 - npm install @react-native-firebase/firestore
+- npm install @react-native-community/datetimepicker
 
 
 
