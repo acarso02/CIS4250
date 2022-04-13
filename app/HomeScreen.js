@@ -52,8 +52,7 @@ const HomeScreen = ({navigation}) => {
 
   async function getPolls(){ 
       var tempArr = []; 
-      var tempIDArr = [];
-      await firestore()
+      firestore()
       .collection('polls')
       .get() 
       .then(async querySnapshot => {
@@ -111,15 +110,17 @@ const HomeScreen = ({navigation}) => {
           return (
             <Card 
               key={k}
+              currentUser={auth().currentUser.uid} //this is the current logged in user
               pollID={p.id}
-              title={poll.Title} 
-              tag={poll.Tags}
-              date={poll.PollLength}
-              username={poll.User}
-              image1Name={poll.Images.Image1.imageName}
-              image2Name={poll.Images.Image2.imageName}
-              im1Votes={poll.Images.Image1.Votes}
-              im2Votes={poll.Images.Image2.Votes}/>
+              title={p.data().Title}
+              tag={p.data().Tags}
+              date={p.data().PollLength}
+              username={p.data().User}
+              image1Name={p.data().Images.Image1.imageName}
+              image2Name={p.data().Images.Image2.imageName}
+              im1Votes={p.data().Images.Image1.Votes}
+              im2Votes={p.data().Images.Image2.Votes}
+              votedList={p.data().hasVoted}/>
           );
         })}
       </View> 

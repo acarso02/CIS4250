@@ -21,12 +21,10 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import database from '@react-native-firebase/database';
+import { clickProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
-const PollDetails = ({ route, navigation }) => {
+const PollHighlight = ({ route, navigation }) => {
 
-    const [loading, setLoading] = useState(false);
-    const [pollArr, setPollArr] = useState([]);
-    const { id } = route.params;
 
     /*Creates a user listener to hold the state of the user*/
     const [initializing, setInitializing] = useState(true);
@@ -37,21 +35,7 @@ const PollDetails = ({ route, navigation }) => {
     useEffect(() => {
       const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
       console.log(auth().currentUser.displayName); 
-      var tempArr = []; 
-      firestore()
-        .collection('polls')
-        .where('User', '==', auth().currentUser.displayName)
-        .get() 
-        .then(querySnapshot => {
-        console.log('Total polls: ', querySnapshot.size)
-      
-      querySnapshot.forEach(documentSnapshot => {
-        tempArr.push(documentSnapshot.data());
-        console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
-      });
-        setPollArr(tempArr);     
-      }); 
-        return subscriber; // unsubscribe on unmount
+      return subscriber; // unsubscribe on unmount
     }, []);
 
 
@@ -61,45 +45,11 @@ const PollDetails = ({ route, navigation }) => {
         setInitializing(false);
     }
 
-    /*return(loading?
-        <View>
-          <Text style={styles.createText}>
-            Title Yeet
-          </Text>
-          <View style={styles.imagePane}>
-            <Image style={{height: 200, width: 200}} source={{uri: imageUri}} />
-
-          </View>
-          <Button title = "Profile" color="blue" onPress={() => {console.log(poll)}}/>
-        </View>
-        :<View style={styles.horizontal, styles.container}><Progress.Circle size={100} thickness={1000} indeterminate={true} /></View>
-
-    )*/
     return(
 
       <ScrollView style={{flex: 1,backgroundColor:'white'}}
       showsVerticalScrollIndicator={false}>
-        <Text style={styles.createText}>My Polls:</Text>
-        
-        <View style={{alignItems: 'center', marginVertical: 20}}> 
-            
-            {pollArr.map((p, k) => {
 
-              console.log("to component: " + p.Title); 
-              return (
-                <Card 
-                  key={k}
-                  title={p.Title} 
-                  tag={p.Tags}
-                  date={p.PollLength}
-                  username={p.User}
-                  image1Name={p.Images.Image1.imageName}
-                  image2Name={p.Images.Image2.imageName}
-                  im1Votes={p.Images.Image1.Votes}
-                  im2Votes={p.Images.Image2.Votes}/>
-              );
-            })}
-        </View> 
 
       </ScrollView>
     )
@@ -116,7 +66,7 @@ const styles  = StyleSheet.create({
         fontWeight: 'bold',
         letterSpacing:2,
         textAlign:'center',
-
+        paddingTop:0
     },
     imagePane: {
         width: '98%',
@@ -139,4 +89,4 @@ const styles  = StyleSheet.create({
         padding: 10
       },
 })
-export default PollDetails;
+export default PollHighlight;

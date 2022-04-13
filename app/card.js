@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text,  View, Dimensions, Image, Button, TouchableOpacity, TouchableHighlight, Pressable } from 'react-native';
+import { StyleSheet, Text,  View, Dimensions, Image, Button, TouchableOpacity, Pressable } from 'react-native';
 import storage, { FirebaseStorageTypes } from '@react-native-firebase/storage';
 import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import PollHighlight from './PollHighlight';
 
 const Card = (props) => {
   const [image1Url, setImage1Url] = useState(undefined);
   const [image2Url, setImage2Url] = useState(undefined);
   const [selectedImage, setSelectedImage] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
+    //get images from storage
     getImage1();
     getImage2();
   }, []); 
+
   //I'm so sorry about how bad of a solution this is.. its 3am
   function getImage1(){
     console.log(props.image1Name);
@@ -35,26 +41,64 @@ const Card = (props) => {
       .catch((e) => console.log('error while getting image ', e));
   }
 
+  //vote button onPress
   function castVote() {
-    const ref = firestore()
-    .collection('polls')
-    .doc(props.pollID);
 
-    //will need total query if multiple images implemented
-    if(selectedImage == 1){
-      ref.update({
-        'Images.Image1.Votes': firestore.FieldValue.increment(1)
-      });
+    if(props.votedList.includes(props.currentUser)){   //user is in the hasVoted list
+      alert('You already voted on that poll')
     }
-    if(selectedImage == 2){
+    else{   //user not in hasVoted list
+      const ref = firestore()
+      .collection('polls')
+      .doc(props.pollID);
+
+      if(selectedImage == 1){
+        ref.update({
+          'Images.Image1.Votes': firestore.FieldValue.increment(1)
+        });
+      }
+      else if(selectedImage == 2){
+        ref.update({
+          'Images.Image2.Votes': firestore.FieldValue.increment(1)
+        });
+      }
+      else{
+        alert('Select an Image First')
+      }
+      //update remote list
       ref.update({
-        'Images.Image2.Votes': firestore.FieldValue.increment(1)
-      });
-    }
-    else{
-      alert('Select an Image First')
+          'Voted': firestore.FieldValue.arrayUnion(props.userID)
+      })
+      //update local list
+      props.votedList.push(props.userID);
     }
   }
+
+//Dynamic Styles
+  //base image style off of selection
+  const imageStyle = function(i) {
+    if(i==selectedImage){
+      return {
+        height: 200,
+        width: 150,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        flexDirection: 'row',
+        borderWidth: 5,
+        borderColor: 'black'
+      }
+    }
+    else{
+      return {
+        height: 200,
+        width: 150,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        flexDirection: 'row',
+      }
+    }
+  }
+
 
 
   return (
@@ -70,11 +114,11 @@ const Card = (props) => {
       <View style={styles.imageContainer}>
         <TouchableOpacity 
           onPress={() => {setSelectedImage(1)}}>
-          <Image style={styles.imageStyle} source={{uri: image1Url}}/>
+          <Image style={imageStyle(1)} source={{uri: image1Url}}/>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => {setSelectedImage(2)}}>
-          <Image style={styles.imageStyle} source={{uri: image2Url}}/>
+          <Image style={imageStyle(2)} source={{uri: image2Url}}/>
         </TouchableOpacity>
       </View>
 
@@ -85,7 +129,7 @@ const Card = (props) => {
       
       <View style={styles.bottomContainer}>
         <View style={{flex: 1, justifyContent: 'center'}}>
-          <Text>{selectedImage}</Text>
+          <Text>{props.username}</Text>
         </View>
         <Button style={styles.buttons} title="VOTE" color="#F51007" onPress={() => {castVote()}}></Button>
         <View style={{flex: 1, justifyContent: 'center'}}>
@@ -96,6 +140,8 @@ const Card = (props) => {
     </View>
   )
 }
+
+
 
 const deviceWidth = Math.round(Dimensions.get('window').width);
 const styles = StyleSheet.create({
@@ -118,13 +164,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginVertical: 10,
     padding: 10
-  },
-  imageStyle: {
-    height: 200,
-    width: 150,
-    marginHorizontal: 10,
-    borderRadius: 10,
-    flexDirection: 'row'
   },
   imageContainer: {
     flexDirection: 'row',
@@ -160,7 +199,6 @@ const styles = StyleSheet.create({
   },
   dateText: {
     textAlign: 'right',
-    flex: 1
   },
   votesContainer: {
     width: '100%',
