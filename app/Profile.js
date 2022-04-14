@@ -4,96 +4,146 @@ import {
   Caption,
   Text,
   TouchableRipple,
-} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState, useEffect } from 'react';
-import reactDom from 'react-dom';
-import {StyleSheet, Input, View, SafeAreaView, Button, ScrollView, ImageBackground, 
-        Dimensions, TextInput, StatusBar, TouchableOpacity, 
-        TouchableWithoutFeedback, ListViewComponent} from "react-native"
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SearchBar } from 'react-native-elements';
+} from "react-native-paper";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import database from "@react-native-firebase/database";
+import reactDom from "react-dom";
 import auth from '@react-native-firebase/auth';
-import SignIn from './SignInScreen';
-import SettingsScreen from './SettingsScreen';
-import HomeScreen from './HomeScreen';
+import {
+  StyleSheet,
+  Input,
+  View,
+  SafeAreaView,
+  Button,
+  ScrollView,
+  ImageBackground,
+  Dimensions,
+  TextInput,
+  StatusBar,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  ListViewComponent,
+} from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { SearchBar } from "react-native-elements";
+import SignIn from "./SignInScreen";
+import SettingsScreen from "./SettingsScreen";
+import HomeScreen from "./HomeScreen";
+import { usePollCount } from "./usePollCount";
+import { useUser } from "./useUser";
+import SignInScreen from './SignInScreen';
 
-const Profile = ({navigation}) => {
-
+const Profile = ({ navigation }) => {
   /*Creates a user listener to hold the state of the user*/
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+  const {user, initializing} = useUser();
 
-    return subscriber; // unsubscribe on unmount
-  }, []); 
+  const pollCount = usePollCount();
 
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing)
-      setInitializing(false);
-  } 
+  function setImages() {
+    database().ref();
+  }
 
-  if (initializing) return null;
+  /* Signs the user out of the app and returns to the signin page */
+  function signOut(){
+
+    if(user){
+      auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+      })
+    }
+    else { //Shouldn't be reaching here but does for some reason. When signing in it doesn't recognize the user
+      console.log('User not signed in!');
+    }
+    
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-
       <View style={styles.userInfoSection}>
-        <View style={{flexDirection: 'row', marginTop: 15}}>
-          <Avatar.Image 
+        <View style={{ flexDirection: "row", marginTop: 15 }}>
+          <Avatar.Image
             source={{
-              uri: 'https://api.adorable.io/avatars/80/abott@adorable.png',
+              uri: "https://api.adorable.io/avatars/80/abott@adorable.png",
             }}
             size={80}
           />
-          <View style={{marginLeft: 20}}>
-            <Title style={[styles.title, {
-              marginTop:15,
-              marginBottom: 5,
-            }]}>Team Impolse</Title>
-            <Caption style={styles.caption}>@im_polse</Caption>
+          <View style={{ marginLeft: 20 }}>
+            <Title
+              style={[
+                styles.title,
+                {
+                  marginTop: 15,
+                  marginBottom: 5,
+                },
+              ]}
+            >
+              {user?.displayName}
+            </Title>
+            <Caption style={styles.caption}>
+              {user?.displayName ? "@" : ""}
+              {user?.displayName}
+            </Caption>
           </View>
         </View>
         <View style={styles.menuItem}>
-            <Icon name="heart-outline" color="orange" size={25}/>
-            <Text style={styles.menuItemText}>Total Votes</Text>
-            <Text style={styles.menuItemText}>1200 Votes</Text>
-          </View>
-         <View style={styles.menuItem}>
-            <Icon name="poll" color="orange" size={25}/>
-            <Text style={styles.menuItemText}>0 Published Polls</Text>
-          </View>
+          <Icon name="heart-outline" color="#793bf5" size={25} />
+          <Text style={styles.menuItemText}>Total Votes</Text>
+          <Text style={styles.menuItemText}>XXXX Votes</Text>
+        </View>
+        <View style={styles.menuItem}>
+          <Icon name="poll" color="#793bf5" size={25} />
+          <Text style={styles.menuItemText}> {pollCount} Published Polls</Text>
+        </View>
       </View>
 
-
-
       <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple
+          onPress={() => {
+            navigation.navigate("PollDetails", {
+              id: "-MyFTS4sQw6PtR7talMm",
+            });
+          }}
+        >
           <View style={styles.menuItem}>
-            <Icon name="heart-outline" color="#FF6347" size={25}/>
-            <Text style={styles.menuItemText}>Total Votes</Text>
-            <Text style={styles.menuItemText}>1200 Votes</Text>
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Icon name="poll" color="#FF6347" size={25}/>
-            <Text style={styles.menuItemText}> Published Polls</Text>
+            <Icon name="poll" color="#793bf5" size={25} />
+            <Text style={styles.menuItemText}>
+              {" "}
+              My Polls
+            </Text>
           </View>
         </TouchableRipple>
 
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple
+          onPress={() => {
+            navigation.navigate("SettingsScreen", {
+              id: "-MyFTS4sQw6PtR7talMm",
+            });
+          }}
+        >
           <View style={styles.menuItem}>
-            <Icon name="cog-outline" color="#FF6347" size={25}/>
+            <Icon name="cog-outline" color="#793bf5" size={25} />
             <Text style={styles.menuItemText}>Settings</Text>
           </View>
         </TouchableRipple>
+
+        <TouchableRipple
+          onPress={() => {
+            {signOut()}
+          }}
+        >
+          <View style={styles.menuItem}>
+            <Icon name="exit-run" color="#793bf5" size={25} />
+            <Text style={styles.menuItemText}>Sign Out</Text>
+          </View>
+        </TouchableRipple>
+
       </View>
     </SafeAreaView>
   );
@@ -111,43 +161,44 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   caption: {
     fontSize: 14,
     lineHeight: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 10,
   },
   infoBoxWrapper: {
-    borderBottomColor: '#dddddd',
+    borderBottomColor: "#dddddd",
     borderBottomWidth: 1,
-    borderTopColor: '#dddddd',
+    borderTopColor: "#dddddd",
     borderTopWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 100,
   },
   infoBox: {
-    width: '50%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "50%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   menuWrapper: {
     marginTop: 10,
   },
   menuItem: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingVertical: 15,
     paddingHorizontal: 30,
   },
   menuItemText: {
-    color: '#777777',
+    color: "black",
     marginLeft: 20,
-    fontWeight: '600',
+    fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
   },
 });
+

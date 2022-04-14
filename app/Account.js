@@ -10,42 +10,37 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SearchBar } from 'react-native-elements';
 import SignIn from './SignInScreen';
+import SettingsScreen from './SettingsScreen';
 import HomeScreen from './HomeScreen';
 import Profile from './Profile';
 import Upload from './Upload';
+import { useUser } from "./useUser";
 
-const SettingsScreen = ({route, navigation}) => {
+const Account = ({navigation}) => {
+
+    const {user, initializing} = useUser();
+
+    console.log(user);
 
     return (
     <ScrollView style={styles.rowContainer}
         showsVerticalScrollIndicator={false}>
 
-        <Text style={styles.headerOne}> Settings</Text>
+        <Text style={styles.headerOne}> Account Information</Text>
         <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => {
-           navigation.navigate("Account", {
-              id: "-MyFTS4sQw6PtR7talMm",
-            });
-        }}>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}> Account Information</Text>
-          </View>
-        </TouchableRipple>
+         <View style={styles.menuItem}>
+          <Text style={styles.menuItemText}> Username</Text>
+          <Text style={styles.menuItemRight}> {user?.displayName}</Text>
         </View>
-        {/* <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}></Text>
-          </View>
-        </TouchableRipple>
         </View>
         <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => {}}>
+
           <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Your poll has been published</Text>
+            <Text style={styles.menuItemText}>Email Address</Text>
+            <Text style={styles.menuItemRight}> {user?.email}</Text>
           </View>
-        </TouchableRipple>
-        </View> */}
+
+        </View>
 
       
     </ScrollView>
@@ -92,7 +87,7 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     color: 'black',
-    marginLeft: 20,
+    width: 100,
     fontWeight: '600',
     fontSize: 18,
     lineHeight: 26,
@@ -113,7 +108,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderWidth: 1
-  }
+  },
 
   });
-export default SettingsScreen;
+export default Account;
