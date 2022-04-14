@@ -49,6 +49,8 @@ const HomeScreen = ({navigation}) => {
     if (initializing)
       setInitializing(false);
   } 
+  
+  if (initializing) return null;
 
   async function getPolls(){ 
       var tempArr = []; 
@@ -68,7 +70,6 @@ const HomeScreen = ({navigation}) => {
       }); 
   }
   
-  if (initializing) return null;
 
   /* Signs the user out of the app and returns to the signin page */
   function signOut(){
@@ -78,12 +79,10 @@ const HomeScreen = ({navigation}) => {
       .signOut()
       .then(() => {
         console.log('User signed out!');
-        navigation.navigate(SignInScreen);
       })
     }
     else { //Shouldn't be reaching here but does for some reason. When signing in it doesn't recognize the user
       console.log('User not signed in!');
-      navigation.navigate(SignInScreen);
     }
     
   }
@@ -131,11 +130,6 @@ const HomeScreen = ({navigation}) => {
         
         <StatusBar style="auto" />
 
-        <Button title = "Create Poll" color="green" onPress={() =>{navigation.navigate(Upload)}}> </Button>
-        <Button title = "Settings" color="teal" onPress={() =>{navigation.navigate(SettingsScreen)}}> </Button>
-        <Button title = "Notifications" color="purple" onPress={() =>{navigation.navigate(Notifications)}}> </Button>
-        <Button title = "user" color="purple" onPress={() =>{console.log(user)}}> </Button>
-        <Button title = "Profile" color="blue" onPress={() =>{navigation.navigate(Profile)}}> </Button>
         <Button 
           title = "MyPoll" 
           color="black" 
