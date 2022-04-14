@@ -168,6 +168,7 @@ const HomeScreen = ({navigation}) => {
                 <View style={{flexDirection: 'row', marginVertical: 5}}>
                   <TouchableOpacity style={styles.tag} onPress={()=>{getPollsByTag(tag)}}>
                     <Text key={k} style={{flex: 1, margin: 5, fontSize: 20}}>#{tag}</Text>
+
                   </TouchableOpacity>
                 </View>
                 

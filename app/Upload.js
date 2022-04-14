@@ -57,6 +57,12 @@ const Upload = ({navigation}) => {
 
   useEffect(() => {
 
+    setTag('');
+    setTitle('');
+    setImageList([]);
+    setProgress(0);
+
+
     getTags();
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
@@ -277,7 +283,7 @@ const Upload = ({navigation}) => {
           <View style={styles.dropdownInputView}>
             <Picker
               selectedValue={tag}
-              style={{ height: 50, width: 150 }}
+              style={{ height: 50, width: 200 }}
               onValueChange={(itemValue, itemIndex) => setTag(itemValue)}
             >
               {tagArr}
@@ -367,7 +373,7 @@ const Upload = ({navigation}) => {
             >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                
+                {/*                 
                 <Button 
                   title = "Navigate to Poll" 
                   color="black" 
@@ -377,14 +383,14 @@ const Upload = ({navigation}) => {
                     });
                     setProgress(0);
                   }}
-                />
+                /> */}
                 <Button title = "Navigate Home" color="black" onPress={() => {navigation.navigate(HomeScreen);setProgress(0);}}/>
                 
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => setCreatePostModalVisible(!createPostModalVisible)}
                 >
-                  <Text style={styles.textStyle}>Dismiss</Text>
+                  <Text style={styles.textStyle}> X </Text>
                 </Pressable>
               </View>
             </View>
@@ -511,10 +517,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFDBA1",
     flexDirection:'row',
     borderRadius: 50,
-    width: "40%",
+    width: "50%",
     height: 45,
     marginBottom: 20,
-    marginLeft: '32%',
+    marginLeft: '27%',
     alignItems: "center",
     borderTopRightRadius:150,
     borderTopLeftRadius:250,
