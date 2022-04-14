@@ -267,7 +267,7 @@ const styles  = StyleSheet.create({
     padding: 10,
     height: 180,
     width: '90%',
-    backgroundColor: 'grey',
+    backgroundColor: '#FFC46D',
     alignSelf: 'center'
   },
   inputSection: {
