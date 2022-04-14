@@ -11,7 +11,7 @@ export function useUser() {
       .ref(`/Polls`)
       .once("value")
       .then((snapshot) => {
-        console.log(snapshot.numChildren());
+        // console.log(snapshot.numChildren());
       });
 
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);

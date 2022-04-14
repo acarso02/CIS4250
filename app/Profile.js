@@ -93,12 +93,12 @@ const Profile = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.menuItem}>
-          <Icon name="heart-outline" color="#793bf5" size={25} />
+          <Icon name="heart-outline" color="#FFAB2F" size={25} />
           <Text style={styles.menuItemText}>Total Votes</Text>
-          <Text style={styles.menuItemText}>XXXX Votes</Text>
+          <Text style={styles.menuItemText}>0 Votes</Text>
         </View>
         <View style={styles.menuItem}>
-          <Icon name="poll" color="#793bf5" size={25} />
+          <Icon name="poll" color="#FFAB2F" size={25} />
           <Text style={styles.menuItemText}> {pollCount} Published Polls</Text>
         </View>
       </View>
@@ -112,7 +112,7 @@ const Profile = ({ navigation }) => {
           }}
         >
           <View style={styles.menuItem}>
-            <Icon name="poll" color="#793bf5" size={25} />
+            <Icon name="poll" color="#FFAB2F" size={25} />
             <Text style={styles.menuItemText}>
               {" "}
               My Polls
@@ -128,7 +128,7 @@ const Profile = ({ navigation }) => {
           }}
         >
           <View style={styles.menuItem}>
-            <Icon name="cog-outline" color="#793bf5" size={25} />
+            <Icon name="cog-outline" color="#FFAB2F" size={25} />
             <Text style={styles.menuItemText}>Settings</Text>
           </View>
         </TouchableRipple>
@@ -139,7 +139,7 @@ const Profile = ({ navigation }) => {
           }}
         >
           <View style={styles.menuItem}>
-            <Icon name="exit-run" color="#793bf5" size={25} />
+            <Icon name="exit-run" color="#FFAB2F" size={25} />
             <Text style={styles.menuItemText}>Sign Out</Text>
           </View>
         </TouchableRipple>

@@ -61,12 +61,12 @@ const HomeScreen = ({navigation}) => {
         .collection('tags')
         .get() 
         .then(async querySnapshot => {
-          console.log('Total tags: ', querySnapshot.size)
+          // console.log('Total tags: ', querySnapshot.size)
           
           querySnapshot.forEach(documentSnapshot => {
             tempTagArr.push(documentSnapshot.data().tag);
   
-            console.log('Tags: ', documentSnapshot.id, documentSnapshot.data().tag);
+            // console.log('Tags: ', documentSnapshot.id, documentSnapshot.data().tag);
           });
           await setTagArr(tempTagArr);    
         });
@@ -83,12 +83,12 @@ const HomeScreen = ({navigation}) => {
     .collection('polls')
     .get() 
     .then(async querySnapshot => {
-      console.log('Total polls: ', querySnapshot.size)
+      // console.log('Total polls: ', querySnapshot.size)
       
       querySnapshot.forEach(documentSnapshot => {
         tempArr.push(documentSnapshot);
 
-        console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+        // console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
       });
       setPollArr(tempArr);    
       setLoading(false);
@@ -101,12 +101,12 @@ const HomeScreen = ({navigation}) => {
       .where('Tags', 'array-contains', tag)
       .get() 
       .then(async querySnapshot => {
-        console.log('Total polls: ', querySnapshot.size)
+        // console.log('Total polls: ', querySnapshot.size)
         
         querySnapshot.forEach(documentSnapshot => {
           newTempArr.push(documentSnapshot);
   
-          console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+          // console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
         });
         await setPollArr(newTempArr);    
         await setLoading(false);
@@ -153,12 +153,12 @@ const HomeScreen = ({navigation}) => {
                   .where('Tags', '==', tag)
                   .get() 
                   .then(async querySnapshot => {
-                    console.log('Total polls: ', querySnapshot.size)
+                    // console.log('Total polls: ', querySnapshot.size)
                     
                     querySnapshot.forEach(documentSnapshot => {
                       newTempArr.push(documentSnapshot);
               
-                      console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+                      // console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
                     });
                     await setPollArr(newTempArr);    
                     await setLoading(false);

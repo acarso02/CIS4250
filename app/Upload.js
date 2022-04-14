@@ -68,9 +68,9 @@ const Upload = ({navigation}) => {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  useEffect(() => {
-    if (imageList[0]){ console.log(imageList[0].uri) }
-  }, [imageList]);
+  // useEffect(() => {
+  //   if (imageList[0]){ console.log(imageList[0].uri) }
+  // }, [imageList]);
 
   function onAuthStateChanged(user) {
     setUser(user);
@@ -86,14 +86,14 @@ const Upload = ({navigation}) => {
       response.assets[0]["key"] = imageList.length
       setImageList(imageList => [...imageList, response.assets[0]]);
     }).then(() => {
-      console.log(imageList);
+      // console.log(imageList);
     })
 
   }
 
   function createPoll() {
 
-    console.log(user.displayName, title, endDate, tag, enabledComments, imageList[0].fileName, imageList[1].fileName)
+    // console.log(user.displayName, title, endDate, tag, enabledComments, imageList[0].fileName, imageList[1].fileName)
     
     let reference = storage().ref("Poll-Images/"+imageList[0].fileName);
     let task = reference.putFile(imageList[0].uri);
@@ -158,10 +158,10 @@ const Upload = ({navigation}) => {
     .collection('tags')
     .get() 
     .then(querySnapshot => {
-      console.log('Total tags: ', querySnapshot.size)
+      // console.log('Total tags: ', querySnapshot.size)
       
       querySnapshot.forEach(documentSnapshot => {
-        console.log(documentSnapshot.id, documentSnapshot.data())
+        // console.log(documentSnapshot.id, documentSnapshot.data())
         tempArr.push(documentSnapshot);
       });
     });
@@ -174,7 +174,7 @@ const Upload = ({navigation}) => {
   }
 
   async function addTag(newTag){
-    console.log(newTag.charAt(0).toUpperCase() + newTag.slice(1))
+    // console.log(newTag.charAt(0).toUpperCase() + newTag.slice(1))
     firestore()
       .collection('tags')
       .add({
@@ -214,7 +214,7 @@ const Upload = ({navigation}) => {
             transparent={true}
             visible={createTagModalVisible}
             onRequestClose={() => {
-              console.log("Modal has been closed");
+              // console.log("Modal has been closed");
               setCreateTagModalVisible(!createTagModalVisible);
             }}
           >
@@ -313,7 +313,7 @@ const Upload = ({navigation}) => {
             transparent={true}
             visible={uploadImageModalVisible}
             onRequestClose={() => {
-              console.log("Modal has been closed");
+              // console.log("Modal has been closed");
               setUploadImageModalVisible(!uploadImageModalVisible);
             }}
           >
@@ -334,7 +334,7 @@ const Upload = ({navigation}) => {
 
         </Modal>
         <View style={styles.imagePane}>
-          {console.log(imageList[1])}
+          {/* console.log(imageList[1]) */}
           {imageList.length == 1 && <View><Image style={{height: '100%', width: '50%', borderRadius: 10}} source={{uri: imageList[0].uri}}/></View>}
           {imageList.length == 2 && 
             <View style={{flexDirection: 'row'}}><Image style={{height: 250, width: 190, borderRadius: 10}} source={{uri: imageList[0].uri}}/>
@@ -367,7 +367,7 @@ const Upload = ({navigation}) => {
               transparent={true}
               visible={createPostModalVisible}
               onRequestClose={() => {
-                console.log("Modal has been closed");
+                // console.log("Modal has been closed");
                 setCreatePostModalVisible(!createPostModalVisible);
               }}
             >
