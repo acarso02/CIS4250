@@ -22,6 +22,7 @@ const SignInScreen = ({navigation}) => {
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       console.log("Logged In!");
+      navigation.navigate(HomeScreen);
     })
     .catch(error => {
       //UPDATE ERROR CODES WITH MODAL INSTEAD OF 
@@ -47,6 +48,7 @@ const SignInScreen = ({navigation}) => {
     .signInWithEmailAndPassword('mg@g.com', 'aaaaaa')
     .then(() => {
       console.log("Logged In!");
+      navigation.navigate(HomeScreen);
     })
   }
 
@@ -107,7 +109,7 @@ const SignInScreen = ({navigation}) => {
             />
           </View>
 
-          <TouchableOpacity>
+          <TouchableOpacity >
             <Text style={styles.forgot_button}>Forgot Password?</Text>
           </TouchableOpacity>
 
@@ -117,9 +119,6 @@ const SignInScreen = ({navigation}) => {
 
         </View>
 
-      </View>
-      <View>
-        <Button title = "yeet" onPress={() => autoLog()}/>
       </View>
       
       <View style={styles.dontHave}>
@@ -134,7 +133,6 @@ const SignInScreen = ({navigation}) => {
       
     </ScrollView>
   );
-
 }
 
 export default SignInScreen;
