@@ -26,7 +26,7 @@ export default () => (
       <Stack.Screen name="SignInScreen" component={SignInScreen} options = {{headerShown:false}} />
       <Stack.Screen name="HomeScreen" component={HomeScreen} options = {{headerShown:false}}/>
       <Stack.Screen name="Register" component={Register} options = {{headerShown: false}}/>
-      <Stack.Screen name="SettingsScreen" component={SettingsScreen} options = {{title: 'SettingsScreen'}}/>
+      <Stack.Screen name="SettingsScreen" component={SettingsScreen} options = {{title: 'Settings'}}/>
       <Stack.Screen name="Notifications" component={Notifications} options = {{title: 'Notifications'}}/>
       <Stack.Screen name="Profile" component={Profile} options = {{title: 'Profile'}}/>
       <Stack.Screen name="Upload" component={Upload} options = {{title: 'New Poll'}}/>
