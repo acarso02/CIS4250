@@ -147,8 +147,8 @@ const HomeScreen = ({navigation}) => {
         <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
           {tagArr.map((tag)=> {
               return (
-                <View style={{flexDirection: 'row', marginVertical: 5}}>
-                  <TouchableOpacity style={styles.tag} onPress={()=>{getPollsByTag(tag)}}>
+                <View key={tag} style={{flexDirection: 'row', marginVertical: 5}}>
+                  <TouchableOpacity style={styles.tag} onPress={()=>getPollsByTag(tag)}>
                     <Text style={{flex: 1, margin: 5, fontSize: 20}}>#{tag}</Text>
                   </TouchableOpacity>
                 </View>

@@ -367,7 +367,7 @@ const Upload = ({navigation}) => {
             >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                
+                {/*                 
                 <Button 
                   title = "Navigate to Poll" 
                   color="black" 
@@ -377,7 +377,7 @@ const Upload = ({navigation}) => {
                     });
                     setProgress(0);
                   }}
-                />
+                /> */}
                 <Button title = "Navigate Home" color="black" onPress={() => {navigation.navigate(HomeScreen);setProgress(0);}}/>
                 
                 <Pressable
