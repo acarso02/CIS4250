@@ -28,7 +28,6 @@ const Card = (props) => {
 
   //I'm so sorry about how bad of a solution this is.. its 3am
   function getImage1(){
-    console.log(props.image1Name);
     firebase.storage()
       .ref('/Poll-Images/' + props.image1Name)
       .getDownloadURL()
@@ -113,7 +112,9 @@ const Card = (props) => {
     <View style={styles.cardContainer}>
 
       <View style={styles.titleArea}>
-        <Text style={styles.titleText}>{props.title}</Text>
+        <Pressable style={styles.titleText} onPress={()=>{navigation.navigate('PollHighlight', {pollID: props.pollID})}}>
+          <Text style={styles.titleText}>{props.title}</Text>
+        </Pressable>
 
         <TouchableOpacity style={styles.tag} >
           <Text style={{flex: 1, margin: 5}}>#{props.tag}</Text>

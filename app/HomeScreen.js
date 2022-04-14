@@ -21,6 +21,7 @@ import Notifications from './Notifications';
 import Profile from './Profile';
 import Upload from './Upload';
 import PollDetails from './PollDetails';
+import PollHighlight from './PollHighlight';
 import Card from './card';
 import { render } from 'react-dom';
 
@@ -103,7 +104,6 @@ const HomeScreen = ({navigation}) => {
 
       <View style={{alignItems: 'center', marginVertical: 20}}> 
         {pollArr.map((p, k) => {
-          console.log(auth().currentUser.uid);
           return (
             <Card 
               key={k}
@@ -117,7 +117,8 @@ const HomeScreen = ({navigation}) => {
               image2Name={p.data().Images.Image2.imageName}
               im1Votes={p.data().Images.Image1.Votes}
               im2Votes={p.data().Images.Image2.Votes}
-              hasVoted={p.data().hasVoted}/>
+              hasVoted={p.data().hasVoted} 
+              navigation={navigation}/>
           );
         })}
       </View> 
@@ -133,6 +134,7 @@ const HomeScreen = ({navigation}) => {
         <Button title = "Notifications" color="purple" onPress={() =>{navigation.navigate(Notifications)}}> </Button>
         <Button title = "user" color="purple" onPress={() =>{console.log(user)}}> </Button>
         <Button title = "Profile" color="blue" onPress={() =>{navigation.navigate(Profile)}}> </Button>
+
         <Button 
           title = "MyPoll" 
           color="black" 

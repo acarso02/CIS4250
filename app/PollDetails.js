@@ -51,6 +51,7 @@ const PollDetails = ({ route, navigation }) => {
       });
         setPollArr(tempArr);     
       }); 
+      console.log(id)
         return subscriber; // unsubscribe on unmount
     }, []);
 
