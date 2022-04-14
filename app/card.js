@@ -24,7 +24,7 @@ const Card = (props) => {
     //set the vote counts 
     setVoteCount1(props.im1Votes);
     setVoteCount2(props.im2Votes);
-  }, []); 
+  }, [image1Url, image2Url, props]); 
 
   //I'm so sorry about how bad of a solution this is.. its 3am
   function getImage1(){
