@@ -34,8 +34,6 @@
 - npm install @react-native-community/datetimepicker
 
 
-
-
 ## Requirements for running the app
 
 - sudo npm install -g eas-cli

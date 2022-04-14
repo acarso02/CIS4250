@@ -99,7 +99,7 @@ const SignInScreen = ({navigation}) => {
             <TextInput
               style={styles.TextInput}
               placeholder="Password"
-            
+
               placeholderTextColor="#ffffff"
               secureTextEntry={true}
               //inlineImageLeft="search_icon"
@@ -211,6 +211,7 @@ const styles  = StyleSheet.create({
 
   mailIcon: {
     //alignContent='center',
+    paddingLeft: 10
     
     
   },
@@ -238,7 +239,8 @@ const styles  = StyleSheet.create({
     padding: 5,
     letterSpacing:2,
     fontSize:13,
-    color: '#000000'
+    color: '#000000',
+    paddingLeft: 5
   },
 
   shadow: {

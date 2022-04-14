@@ -107,7 +107,6 @@ const Card = (props) => {
     }
   }
 
-
   return (
     <View style={styles.cardContainer}>
 
@@ -144,7 +143,7 @@ const Card = (props) => {
         </View>
         <Button style={styles.buttons} title="VOTE" color="#F51007" onPress={() => {castVote()}}></Button>
         <View style={{flex: 1, justifyContent: 'center'}}>
-          <Text style={styles.dateText}>{props.date.toString()}</Text>
+          <Text style={styles.dateText}>{props.date.toDate().toLocaleDateString()}</Text>
         </View>
       </View>
 
