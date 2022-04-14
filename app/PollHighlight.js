@@ -85,7 +85,7 @@ const PollHighlight = ({route, navigation}) => {
             setPercents({percentage1: 0, percentage2: 0});
           }
           else{
-            setPercents({percentage1: (tempPoll.Images.Image1.Votes/total)*100, percentage2: (tempPoll.Images.Image2.Votes/total)*100});
+            setPercents({percentage1: Math.round((tempPoll.Images.Image1.Votes/total)*100), percentage2: Math.round((tempPoll.Images.Image2.Votes/total)*100)});
           }
         }
       })
