@@ -160,7 +160,7 @@ const styles  = StyleSheet.create({
     borderTopEndRadius: 780,
     borderBottomStartRadius:940,
     borderBottomEndRadius:720,
-    marginTop: 50,
+    marginTop: 40,
     elevation: 5
   },
 
