@@ -21,6 +21,7 @@ import Notifications from './Notifications';
 import Profile from './Profile';
 import Upload from './Upload';
 import PollDetails from './PollDetails';
+import PollHighlight from './PollHighlight';
 import Card from './card';
 import { render } from 'react-dom';
 
@@ -119,7 +120,8 @@ const HomeScreen = ({navigation}) => {
               image2Name={p.data().Images.Image2.imageName}
               im1Votes={p.data().Images.Image1.Votes}
               im2Votes={p.data().Images.Image2.Votes}
-              votedList={p.data().hasVoted}/>
+              hasVoted={p.data().hasVoted} 
+              navigation={navigation}/>
           );
         })}
       </View> 
