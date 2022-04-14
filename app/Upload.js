@@ -102,7 +102,7 @@ const Upload = ({navigation}) => {
 
       console.log('Image 1 uploaded to the bucket!');
 
-      const comments = [{user:"",comment:"",date:firestore.Timestamp.fromDate(tomorrow)}];
+      const comments = [];
       // const len = queryLength + '';
       // console.log(len);
 

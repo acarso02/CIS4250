@@ -90,11 +90,11 @@ const HomeScreen = ({navigation}) => {
 
         console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
       });
-      await setPollArr(tempArr);    
-      await setLoading(false);
+      setPollArr(tempArr);    
+      setLoading(false);
     }); 
 
-    async function getPollsByTag(tag){ 
+    let getPollsByTag = (tag) =>{ 
       var newTempArr = []; 
       firestore()
       .collection('polls')
@@ -145,16 +145,35 @@ const HomeScreen = ({navigation}) => {
       
       <View > 
         <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
-          {tagArr.map((tag)=> {
+          {tagArr.map((tag, k)=> {
+                let getPollsByTag = (tag) =>{ 
+                  var newTempArr = []; 
+                  firestore()
+                  .collection('polls')
+                  .where('Tags', '==', tag)
+                  .get() 
+                  .then(async querySnapshot => {
+                    console.log('Total polls: ', querySnapshot.size)
+                    
+                    querySnapshot.forEach(documentSnapshot => {
+                      newTempArr.push(documentSnapshot);
+              
+                      console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+                    });
+                    await setPollArr(newTempArr);    
+                    await setLoading(false);
+                  }); 
+                }
               return (
-                <View key={tag} style={{flexDirection: 'row', marginVertical: 5}}>
-                  <TouchableOpacity style={styles.tag} onPress={()=>getPollsByTag(tag)}>
-                    <Text style={{flex: 1, margin: 5, fontSize: 20}}>#{tag}</Text>
+                <View style={{flexDirection: 'row', marginVertical: 5}}>
+                  <TouchableOpacity style={styles.tag} onPress={()=>{getPollsByTag(tag)}}>
+                    <Text key={k} style={{flex: 1, margin: 5, fontSize: 20}}>#{tag}</Text>
+
                   </TouchableOpacity>
                 </View>
+                
               )}
             )}
-
         </ScrollView>
       </View>
 
