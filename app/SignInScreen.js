@@ -22,7 +22,6 @@ const SignInScreen = ({navigation}) => {
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       console.log("Logged In!");
-      navigation.navigate(HomeScreen);
     })
     .catch(error => {
       //UPDATE ERROR CODES WITH MODAL INSTEAD OF 
@@ -48,7 +47,6 @@ const SignInScreen = ({navigation}) => {
     .signInWithEmailAndPassword('mg@g.com', 'aaaaaa')
     .then(() => {
       console.log("Logged In!");
-      navigation.navigate(HomeScreen);
     })
   }
 

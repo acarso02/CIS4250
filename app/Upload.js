@@ -12,9 +12,11 @@ import { Picker } from '@react-native-picker/picker';
 import { DateInput } from 'react-native-date-input';
 import ProgressBar from 'react-native-progress/Bar';
 import dayjs from 'dayjs';
+import Card from './card';
 
 import HomeScreen from './HomeScreen';
 import PollDetails from './PollDetails';
+import PollHighlight from './PollHighlight';
 
 import { utils } from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
@@ -103,32 +105,9 @@ const Upload = ({navigation}) => {
 
       console.log('Image 1 uploaded to the bucket!');
 
-      // const newReference = 
-      //   database()
-      //   .ref('/Polls/')
-      //   .push();
-      // console.log('Auto generated key: ', newReference.key);
-      // setUniqueKey(newReference.key);
-      // console.log(uniqueKey);
-
-      // newReference
-      // .set({
-      //   User: user.displayName,
-      //   Title: title,
-      //   PollLength: endDate,
-      //   Tags: tags,
-      //   Comments: comments,
-      //   Images: {
-      //     Image1: {
-      //       Votes: 0,
-      //       imageName: imageList[0].fileName
-      //     },
-      //     Image2: {
-      //       Votes: 0,
-      //       imageName: imageList[1].fileName
-      //     }
-      //   }
-      // })
+      const comments = [{user:"default",comment:"",date:firestore.Timestamp.fromDate(tomorrow)}];
+      // const len = queryLength + '';
+      // console.log(len);
 
       const comments = enabledComments?[{user:"default",comment:"",date:""}]:null;
       const len = queryLength + '';
@@ -199,6 +178,13 @@ const Upload = ({navigation}) => {
           </View>
           {/*Poll Length input*/}
           <Text style={styles.titleText}>Poll Length</Text>
+
+          <Text style={styles.dateText}>Current Date: {endDate.toLocaleDateString()}</Text>
+          <View style={styles.dateButton}>
+            <Button color="#ED6C11" onPress={showDatepicker} title="Change Date"/>
+          </View>
+          {/*Tags input*/}
+          <Text style={styles.titleText}>Tags</Text>
           <View style={styles.dropdownInputView}>
             <Picker
               selectedValue={endDate}
@@ -219,19 +205,9 @@ const Upload = ({navigation}) => {
             onChangeText={(tags) => setTags(tags)}
             />
           </View>
-          <Text style={styles.titleText}>Enable Comments</Text>
-          <View>
-            <Switch
-              trackColor={{ false: "#81b0ff", true: "#81b0ff" }}
-              thumbColor={enabledComments ? "#f5dd4b" : "#767577"}
-              onValueChange={toggleSwitch}
-              style={styles.switch}
-              value={enabledComments}
-            />
-          </View>
         </View>
         <View style={styles.bottomButton}>
-          <Button title = "Next Page" color="black" onPress={() =>{title?setProgress(50):alert(`Please provide a title to continue`)}}> </Button>
+          <Button title = "Next Page" color="#666666" onPress={() =>{title?setProgress(50):alert(`Please provide a title to continue`)}}> </Button>
         </View>
       </View>
     )
@@ -252,14 +228,14 @@ const Upload = ({navigation}) => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               
-              {imageList.length < 2?<Button title = "Upload Image" color="black" onPress={() =>{browseImages()}}> </Button>:<Text>Maximum image limit found</Text>}
+              {imageList.length < 2?<Button title = "Upload Image" color="#ED6C11" onPress={() =>{browseImages()}}> </Button>:<Text>Maximum image limit found</Text>}
               <Text>{imageList.length} Images Uploaded</Text>
               
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setUploadImageModalVisible(!uploadImageModalVisible)}
               >
-                <Text style={styles.textStyle}>Close</Text>
+                <Text style={styles.textStyle}> X </Text>
               </Pressable>
             </View>
           </View>
@@ -275,8 +251,12 @@ const Upload = ({navigation}) => {
           <Button title = "Clear Images" color="black" onPress={() =>{setImageList([]);}}> </Button>
         </View>
         <View style={styles.bottomButton}>
-          <Button title = "Next Page" color="black" onPress={() =>{imageList.length === 2?setProgress(100):alert(`Missing ${2 - imageList.length} image(s), please select two images to continue`)}}> </Button>
-          <Button title = "Previous Page" color="black" onPress={() =>{setProgress(0);}}> </Button>
+          <View style={{marginBottom:'2%'}}>
+            <Button title = "Next Page" color="#666666" onPress={() =>{imageList.length === 2?setProgress(100):alert(`Missing ${2 - imageList.length} image(s), please select two images to continue`)}}> </Button>
+          </View>
+          <View>
+            <Button title = "Previous Page" color="#666666" onPress={() =>{setProgress(0);}}> </Button>
+          </View>
         </View>
       </View>
     )
@@ -301,12 +281,13 @@ const Upload = ({navigation}) => {
                   title = "Navigate to Poll" 
                   color="black" 
                   onPress={() => {
-                    navigation.navigate(PollDetails, {
+                    navigation.navigate(PollHighlight, {
                       id: uniqueKey
                     });
+                    setProgress(0);
                   }}
                 />
-                <Button title = "Navigate Home" color="black" onPress={() => {navigation.navigate(HomeScreen)}}/>
+                <Button title = "Navigate Home" color="black" onPress={() => {navigation.navigate(HomeScreen);setProgress(0);}}/>
                 
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
@@ -321,9 +302,28 @@ const Upload = ({navigation}) => {
         <View style={{paddingBottom: 50,paddingTop: 5}}>
           <Text style={styles.createText}>Summary</Text>
         </View>
+        <View style={{marginLeft:'2%',marginTop:'-8%'}}>
+          <Card 
+                key={"YEET"}
+                currentUser={auth().currentUser.uid} //this is the current logged in user
+                pollID={"YEET"}
+                title={title}
+                tag={tag}
+                date={endDate.toLocaleDateString()}
+                username={user.displayName}
+                image1Name={imageList[0].fileName}
+                image2Name={imageList[1].fileName}
+                im1Votes={0}
+                im2Votes={0}
+                votedList={[]}/>
+        </View>
         <View style={styles.bottomButton}>
-          <Button title = "Submit" color="black" onPress={() =>{createPoll()}}> </Button>
-          <Button title = "Previous Page" color="black" onPress={() =>{setProgress(50);}}> </Button>
+          <View style={{marginBottom:'2%'}}>
+            <Button title = "Submit" color="#666666" onPress={() =>{createPoll()}}> </Button>
+          </View>
+          <View>
+            <Button title = "Previous Page" color="#666666" onPress={() =>{setProgress(50);}}> </Button>
+          </View>
         </View>
       </View>
     )
@@ -349,6 +349,13 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
   },
 
+  dateButton: {
+    // position: 'absolute',
+    width: '60%',
+    marginLeft: '22%',
+    marginBottom: '5%',
+  },
+
   titleText: {
     color: 'black',
     fontSize: 15,
@@ -356,6 +363,14 @@ const styles = StyleSheet.create({
     paddingLeft:20,
     textAlign:'center',
     paddingBottom:25
+    // letterSpacing:2,
+  },
+  dateText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingLeft:20,
+    textAlign:'center',
     // letterSpacing:2,
   },
 
