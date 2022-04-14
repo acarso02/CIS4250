@@ -37,7 +37,6 @@ const Card = (props) => {
       .catch((e) => console.log('error while getting image ', e));
   }
   function getImage2(){
-    console.log(props.image2Name);
     firebase.storage()
       .ref('/Poll-Images/' + props.image2Name)
       .getDownloadURL()

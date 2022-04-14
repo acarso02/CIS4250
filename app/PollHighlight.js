@@ -177,75 +177,74 @@ const PollHighlight = ({route, navigation}) => {
     }
   }
   
-    return(
-      
-      <ScrollView style={{flex: 1,backgroundColor:'white'}}
-      showsVerticalScrollIndicator={false}>
+  return(
+    <ScrollView style={{flex: 1,backgroundColor:'white'}}
+    showsVerticalScrollIndicator={false}>
 
-        <View style={{flexDirection: 'column'}}>
-          <Text style={styles.titleText}>{title}</Text>
-          <Text style={{fontSize: 18, textAlign: 'center'}}>By: {creator}</Text>
-        </View>
+      <View style={{flexDirection: 'column'}}>
+        <Text style={styles.titleText}>{title}</Text>
+        <Text style={{fontSize: 18, textAlign: 'center'}}>By: {creator}</Text>
+      </View>
 
-        <View style={styles.imageContainer}>
-          <TouchableOpacity 
-            onPress={() => {setSelectedImage(1)}}>
-            <Image style={imageStyle(1)} source={{uri: image1Url}}/>
-          </TouchableOpacity>
+      <View style={styles.imageContainer}>
+        <TouchableOpacity 
+          onPress={() => {setSelectedImage(1)}}>
+          <Image style={imageStyle(1)} source={{uri: image1Url}}/>
+        </TouchableOpacity>
 
-          <TouchableOpacity 
-            onPress={() => {setSelectedImage(2)}}>
-            <Image style={imageStyle(2)} source={{uri: image2Url}}/>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity 
+          onPress={() => {setSelectedImage(2)}}>
+          <Image style={imageStyle(2)} source={{uri: image2Url}}/>
+        </TouchableOpacity>
+      </View>
 
-        <View style={styles.votesContainer}>
-          <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 23}}>{percents.percentage1}%</Text>
-          <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 23}}>{percents.percentage2}%</Text>
-        </View>
+      <View style={styles.votesContainer}>
+        <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 23}}>{percents.percentage1}%</Text>
+        <Text style={{flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 23}}>{percents.percentage2}%</Text>
+      </View>
 
-        <View>
-          <Text style={{fontSize: 24, flexDirection: 'row', marginLeft: 20}}>Comments:</Text>
-        </View>
+      <View>
+        <Text style={{fontSize: 24, flexDirection: 'row', marginLeft: 20}}>Comments:</Text>
+      </View>
 
-        <View style={styles.commentSection}>
-          <ScrollView ref={scrollViewRef}
-          onContentSizeChange={() =>
-            scrollViewRef.current.scrollToEnd({ animated: true })
-          }>
-            {comments.map((comment)=> {
-              return (
-                <View style={{flexDirection: 'row', marginVertical: 5}}>
-                  <Text style={{fontSize: 18, fontWeight: 'bold'}}>{comment.user}:  </Text>
-                  <Text style={{fontSize: 18}}>{comment.comment}</Text>
-                </View>
-              )}
+      <View style={styles.commentSection}>
+        <ScrollView ref={scrollViewRef}
+        onContentSizeChange={() =>
+          scrollViewRef.current.scrollToEnd({ animated: true })
+        }>
+          {comments.map((comment)=> {
+            return (
+              <View style={{flexDirection: 'row', marginVertical: 5}}>
+                <Text style={{fontSize: 18, fontWeight: 'bold'}}>{comment.user}:  </Text>
+                <Text style={{fontSize: 18}}>{comment.comment}</Text>
+              </View>
             )}
-          </ScrollView>
-        </View>
-        
-        <View style={styles.inputSection}>
-          <TextInput style={styles.input} placeholder="Comment" onChangeText={(thisComment) => setMyComment(thisComment)}></TextInput>
-          <Button style={{flex: 1}} title='Submit' color={'#E65400'} onPress={() => {postComment()}}></Button>
-        </View>
+          )}
+        </ScrollView>
+      </View>
+      
+      <View style={styles.inputSection}>
+        <TextInput style={styles.input} placeholder="Comment" onChangeText={(thisComment) => setMyComment(thisComment)}></TextInput>
+        <Button style={{flex: 1}} title='Submit' color={'#E65400'} onPress={() => {postComment()}}></Button>
+      </View>
 
-        {poll.UserId == auth().currentUser.uid && 
-          <View style={{width: 120, alignSelf: 'center', marginVertical: 10}}>
-            <Button title='Delete Poll' color='red' onPress={()=>{    
-              Alert.alert( "Confirm",
-                'Are you sure you want to delete this Poll?',
-                [
-                  {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                  {text: 'Delete', onPress: () => deletePoll(), style: 'destructive'},
-                ],
-                { cancelable: false }
-              )}}>
-            </Button>
-          </View>
-        }
+      {poll.UserId == auth().currentUser.uid && 
+        <View style={{width: 120, alignSelf: 'center', marginVertical: 10}}>
+          <Button title='Delete Poll' color='red' onPress={()=>{    
+            Alert.alert( "Confirm",
+              'Are you sure you want to delete this Poll?',
+              [
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'Delete', onPress: () => deletePoll(), style: 'destructive'},
+              ],
+              { cancelable: false }
+            )}}>
+          </Button>
+        </View>
+      }
 
-      </ScrollView >
-    )
+    </ScrollView >
+  )
 }
 
 const styles  = StyleSheet.create({
