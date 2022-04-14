@@ -136,8 +136,7 @@ const Upload = ({navigation}) => {
 
       firestore()
       .collection('polls')
-      .doc(len)
-      .set({
+      .add({
         User: user.displayName,
         Title: title,
         PollLength: new Date(firestore.Timestamp.now().seconds*1000).toLocaleDateString(),
@@ -152,7 +151,8 @@ const Upload = ({navigation}) => {
             Votes: 0,
             imageName: imageList[1].fileName
           }
-        }
+        },
+        Voted: []
       })
       .then(() => {
         console.log('Saved in Realtime Database!');
@@ -232,7 +232,6 @@ const Upload = ({navigation}) => {
         </View>
         <View style={styles.bottomButton}>
           <Button title = "Next Page" color="black" onPress={() =>{title?setProgress(50):alert(`Please provide a title to continue`)}}> </Button>
-          <Button title = "hi" color="black" onPress={() =>{console.log(tomorrow)}}> </Button>
         </View>
       </View>
     )
@@ -277,7 +276,6 @@ const Upload = ({navigation}) => {
         </View>
         <View style={styles.bottomButton}>
           <Button title = "Next Page" color="black" onPress={() =>{imageList.length === 2?setProgress(100):alert(`Missing ${2 - imageList.length} image(s), please select two images to continue`)}}> </Button>
-          <Button title = "User" color="black" onPress={() =>{console.log(imageList[1].uri)}}> </Button>
           <Button title = "Previous Page" color="black" onPress={() =>{setProgress(0);}}> </Button>
         </View>
       </View>

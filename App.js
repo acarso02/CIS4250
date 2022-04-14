@@ -11,7 +11,8 @@ import SettingsScreen from './app/SettingsScreen';
 import Notifications from './app/Notifications';
 import Profile from './app/Profile';
 import Upload from './app/Upload';
-import PollDetails from './app/PollDetails';
+import PollDetails from './app/PollDetails'
+import PollHighlight from './app/PollHighlight';
 
 //import Tabs from './navigation/tabs';
 
@@ -30,6 +31,7 @@ export default () => (
       <Stack.Screen name="Profile" component={Profile} options = {{title: 'Profile'}}/>
       <Stack.Screen name="Upload" component={Upload} options = {{title: 'New Poll'}}/>
       <Stack.Screen name="PollDetails" component={PollDetails} options = {{title: 'Poll'}}/>
+      <Stack.Screen name="PollHighlight" component={PollHighlight} options = {{title: 'Poll Highlight'}}/>
 
     </Stack.Navigator>
 
