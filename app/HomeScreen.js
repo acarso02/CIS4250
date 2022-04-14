@@ -30,8 +30,10 @@ const HomeScreen = ({navigation}) => {
   //const image = {uri: "https://toppng.com/uploads/preview/orange-splat-orange-paint-splash-11562922076goctvo3zry.png"};
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [pollArr, setPollArr] = useState([]);  
+  const [pollArr, setPollArr] = useState([]);
+  const [tagArr, setTagArr] = useState([])
   const [loading, setLoading] = useState(true);
+  const [tagSearch, setTagSearch] = useState('');
 
   /*Creates a user listener to hold the state of the user*/
   const [initializing, setInitializing] = useState(true);
@@ -42,6 +44,7 @@ const HomeScreen = ({navigation}) => {
     setLoading(true);
 
     getPolls();
+    getTags();
     return subscriber; // unsubscribe on unmount
   }, []); 
 
@@ -50,26 +53,67 @@ const HomeScreen = ({navigation}) => {
     if (initializing)
       setInitializing(false);
   } 
+
+  async function getTags(){ 
+      var tempTagArr = []; 
+      try{
+        firestore()
+        .collection('tags')
+        .get() 
+        .then(async querySnapshot => {
+          console.log('Total tags: ', querySnapshot.size)
+          
+          querySnapshot.forEach(documentSnapshot => {
+            tempTagArr.push(documentSnapshot.data().tag);
   
-  if (initializing) return null;
+            console.log('Tags: ', documentSnapshot.id, documentSnapshot.data().tag);
+          });
+          await setTagArr(tempTagArr);    
+        });
+      }
+      catch(error){
+        console.log(error);
+      }
+
+  }
 
   async function getPolls(){ 
-      var tempArr = []; 
+    var tempArr = []; 
+    firestore()
+    .collection('polls')
+    .get() 
+    .then(async querySnapshot => {
+      console.log('Total polls: ', querySnapshot.size)
+      
+      querySnapshot.forEach(documentSnapshot => {
+        tempArr.push(documentSnapshot);
+
+        console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+      });
+      await setPollArr(tempArr);    
+      await setLoading(false);
+    }); 
+
+    async function getPollsByTag(tag){ 
+      var newTempArr = []; 
       firestore()
       .collection('polls')
+      .where('Tags', 'array-contains', tag)
       .get() 
       .then(async querySnapshot => {
         console.log('Total polls: ', querySnapshot.size)
         
         querySnapshot.forEach(documentSnapshot => {
-          tempArr.push(documentSnapshot);
-
+          newTempArr.push(documentSnapshot);
+  
           console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
         });
-        await setPollArr(tempArr);    
+        await setPollArr(newTempArr);    
         await setLoading(false);
       }); 
-  }
+    }
+}
+
   
 
   /* Signs the user out of the app and returns to the signin page */
@@ -88,6 +132,8 @@ const HomeScreen = ({navigation}) => {
     
   }
 
+  if (initializing) return null;
+
   //IMPORTANT TO LEARN MAPPING STATEMENTS AND HOW THEY CAN BE USED
   //imageList.map(image => (<Text>Name:{image.fileName}</Text>))
 
@@ -95,13 +141,21 @@ const HomeScreen = ({navigation}) => {
     <ScrollView 
       style={{flex: 1,backgroundColor:'white'}}
         showsVerticalScrollIndicator={false}
-      refreshControl={<RefreshControl refreshing={false} onRefresh={()=>{getPolls()}} />}> 
+      refreshControl={<RefreshControl refreshing={false} onRefresh={()=>{getPolls(); getTags();}} />}> 
       
-      <View> 
-        <SearchBar
-          placeholder='Search' 
-          textFieldBackgroundColor='blue'
-        />
+      <View > 
+        <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
+          {tagArr.map((tag)=> {
+              return (
+                <View style={{flexDirection: 'row', marginVertical: 5}}>
+                  <TouchableOpacity style={styles.tag} onPress={()=>{getPollsByTag(tag)}}>
+                    <Text style={{flex: 1, margin: 5, fontSize: 20}}>#{tag}</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            )}
+
+        </ScrollView>
       </View>
 
       <View style={{alignItems: 'center', marginVertical: 20}}> 
@@ -126,23 +180,9 @@ const HomeScreen = ({navigation}) => {
         })}
       </View> 
 
-      <Button title='Refresh' onPress={() => {getPolls()}}></Button>
-
       <View style={styles.background}>
         
         <StatusBar style="auto" />
-
-        <Button 
-          title = "MyPoll" 
-          color="black" 
-          onPress={() => {
-            navigation.navigate('PollDetails',{
-              id: '-MyFTS4sQw6PtR7talMm',
-            });
-          }}
-        />
-
-        <Button title = "Sign Out" color="black" onPress={() =>{signOut()}}> </Button>
     
       </View>
       
@@ -169,7 +209,13 @@ const styles = StyleSheet.create({
     width: 200,
     height: 400,
   },
- 
+  tag: {
+    borderRadius: 20,
+    backgroundColor: '#F2A50C',
+    height: 40,
+    margin: 5,
+    flex: 1
+  },
   inputView: {
     backgroundColor: "lavender",
     borderRadius: 30,

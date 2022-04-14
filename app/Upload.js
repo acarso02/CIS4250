@@ -1,15 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
 import {StyleSheet, Modal, Image, Input, View, Button, 
         Pressable, ScrollView, ImageBackground, Dimensions, 
-        Text, TextInput, StatusBar, TouchableOpacity, 
-        TouchableWithoutFeedback, ListViewComponent, Switch} from "react-native"
+        Text, TextInput, StatusBar, TouchableOpacity, TouchableHighlight,
+        TouchableWithoutFeedback, ListViewComponent, Switch} from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImagePicker, launchImageLibrary } from 'react-native-image-picker';
 import { Picker } from '@react-native-picker/picker';
-import { DateInput } from 'react-native-date-input';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import ProgressBar from 'react-native-progress/Bar';
 import dayjs from 'dayjs';
 import Card from './card';
@@ -22,6 +23,7 @@ import { utils } from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import { render } from 'react-dom';
 
 const Upload = ({navigation}) => {
 
@@ -30,14 +32,17 @@ const Upload = ({navigation}) => {
   const [title, setTitle] = useState('');
   /* NOTE: TAGS MUST BE CHANGED TO DB ENTRY VERSION ASAP */
   // const [tags, setTags] = useState([]);
-  const [tags, setTags] = useState('');
+  const [tag, setTag] = useState();
+  const [tagArr, setTagArr] = useState([]);
+  const [tmpTag, setTmpTag] = useState();
   const today = new Date()
   const tomorrow = new Date(today)
-  tomorrow.setDate(tomorrow.getDate())
-  tomorrow.setHours(0,0,0,0);
+  tomorrow.setDate(tomorrow.getDate());
+  // tomorrow.setHours(0,0,0,0);
   const [endDate, setEndDate] = useState(tomorrow);
   const [imageList, setImageList] = useState([]); 
   const [uniqueKey, setUniqueKey] = useState('');
+  const [createTagModalVisible, setCreateTagModalVisible] = useState(false);
   const [createPostModalVisible, setCreatePostModalVisible] = useState(false);
   const [uploadImageModalVisible, setUploadImageModalVisible] = useState(false);
   const options = { title: 'Select an Image' }
@@ -51,14 +56,14 @@ const Upload = ({navigation}) => {
   const [user, setUser] = useState();
 
   useEffect(() => {
+
+    getTags();
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
 
   useEffect(() => {
-    if (imageList[0]){
-      console.log(imageList[0].uri)
-    }
+    if (imageList[0]){ console.log(imageList[0].uri) }
   }, [imageList]);
 
   function onAuthStateChanged(user) {
@@ -82,44 +87,29 @@ const Upload = ({navigation}) => {
 
   function createPoll() {
 
-    firestore()
-    .collection('polls')
-    .get()
-    .then(querySnapshot => {
-      console.log('Total users: ', querySnapshot.size);
-      setQueryLength(querySnapshot.size + 1);
-
-      querySnapshot.forEach(documentSnapshot => {
-        console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
-      });
-    });
-
-    console.log(user.displayName, title, endDate, tags, enabledComments, imageList[0].fileName, imageList[1].fileName)
+    console.log(user.displayName, title, endDate, tag, enabledComments, imageList[0].fileName, imageList[1].fileName)
     
     let reference = storage().ref("Poll-Images/"+imageList[0].fileName);
     let task = reference.putFile(imageList[0].uri);
-
-    console.log(queryLength);
 
     task.then(() => {
 
       console.log('Image 1 uploaded to the bucket!');
 
-      const comments = [{user:"default",comment:"",date:firestore.Timestamp.fromDate(tomorrow)}];
+      const comments = [{user:"",comment:"",date:firestore.Timestamp.fromDate(tomorrow)}];
       // const len = queryLength + '';
       // console.log(len);
 
-      const comments = enabledComments?[{user:"default",comment:"",date:""}]:null;
-      const len = queryLength + '';
-      console.log(len);
+      const tmr = firestore.Timestamp.fromDate(endDate);
 
       firestore()
       .collection('polls')
       .add({
+        UserId: user.uid,
         User: user.displayName,
         Title: title,
-        PollLength: new Date(firestore.Timestamp.now().seconds*1000).toLocaleDateString(),
-        Tags: tags,
+        PollLength: tmr,
+        Tags: tag,
         Comments: comments,
         Images: {
           Image1: {
@@ -131,7 +121,7 @@ const Upload = ({navigation}) => {
             imageName: imageList[1].fileName
           }
         },
-        hasVoted: []
+        hasVoted: [user.uid]
       })
       .then(() => {
         console.log('Saved in Realtime Database!');
@@ -144,17 +134,68 @@ const Upload = ({navigation}) => {
           setCreatePostModalVisible(true);
         })
         .catch((e) => {
-          console.log('uploading image 2 error => ', e);
+          console.log('Error uploading image 2 => ', e);
         });
       })
       .catch((e) => {
-        console.log('storing poll error => ', e);
+        console.log('Error storing poll => ', e);
       });
     })
     .catch((e) => {
-      console.log('uploading image 1 error => ', e);
+      console.log('Error uploading image 1 => ', e);
     });
   }
+  
+  async function getTags(){
+    var tempArr = []; 
+    await firestore()
+    .collection('tags')
+    .get() 
+    .then(querySnapshot => {
+      console.log('Total tags: ', querySnapshot.size)
+      
+      querySnapshot.forEach(documentSnapshot => {
+        console.log(documentSnapshot.id, documentSnapshot.data())
+        tempArr.push(documentSnapshot);
+      });
+    });
+
+    const tagArray = await tempArr.map((tag) => {
+      return <Picker.Item label={tag.data().tag} value={tag.data().tag} key={tag.id}/>
+    })
+
+    setTagArr(tagArray);
+  }
+
+  async function addTag(newTag){
+    console.log(newTag.charAt(0).toUpperCase() + newTag.slice(1))
+    firestore()
+      .collection('tags')
+      .add({
+        tag:newTag.charAt(0).toUpperCase() + newTag.slice(1)
+      })
+      .catch((e) => {
+        alert("Error creating new tag");
+      })
+  }
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setEndDate(new Date(currentDate.setDate(currentDate.getDate() - 1)));
+  };
+
+  const showMode = (currentMode) => {
+    DateTimePickerAndroid.open({
+      value: endDate,
+      onChange,
+      mode: currentMode,
+      is24Hour: true
+    })
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
 
   /* {imageList?<Text>No images found</Text>:imageList.map(image => <Image styles={styles.tinyLogo} source={image.uri}/>)} */
 
@@ -162,6 +203,55 @@ const Upload = ({navigation}) => {
     return (
       <View style={{flex: 1,backgroundColor:'white',paddingTop: 5}}>
         <ProgressBar progress={0.2} width={393} height={8} borderRadius={20}/>
+        <Modal 
+            animationType="slide"
+            transparent={true}
+            visible={createTagModalVisible}
+            onRequestClose={() => {
+              console.log("Modal has been closed");
+              setCreateTagModalVisible(!createTagModalVisible);
+            }}
+          >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+
+              <Pressable
+                style={styles.buttonClose}
+                onPress={() => setCreateTagModalVisible(!createTagModalVisible)}
+              >
+                <Text style={styles.textStyle}> X </Text>
+              </Pressable>
+              
+              <Text>Add a new tag:</Text>
+              <View style={styles.inputView}>
+                <TextInput
+                style={styles.TextInput}
+                placeholder={"(Animals, Portfolio, etc..)"}
+                placeholderTextColor="grey"
+                onChangeText={(cngTag) => {setTag(cngTag);setTmpTag(cngTag)}}
+                />
+              </View>
+              
+              <Pressable
+                style={[styles.button, styles.buttonSubmit]}
+                onPress={async () => {
+                  if(tmpTag){
+                    await setCreateTagModalVisible(!createTagModalVisible); 
+                    await addTag(tag); 
+                    await getTags();
+                  }
+                  else{
+                    console.log("Please enter a tag to submit");
+                    alert("Please enter a tag to submit");
+                  }
+                }}
+              >
+                <Text style={styles.textStyle}>Submit</Text>
+              </Pressable>
+            </View>
+          </View>
+
+        </Modal>
         <View style={{paddingBottom: 50,paddingTop: 5}}>
           <Text style={styles.createText}>Poll Details</Text>
         </View>
@@ -178,7 +268,6 @@ const Upload = ({navigation}) => {
           </View>
           {/*Poll Length input*/}
           <Text style={styles.titleText}>Poll Length</Text>
-
           <Text style={styles.dateText}>Current Date: {endDate.toLocaleDateString()}</Text>
           <View style={styles.dateButton}>
             <Button color="#ED6C11" onPress={showDatepicker} title="Change Date"/>
@@ -187,23 +276,20 @@ const Upload = ({navigation}) => {
           <Text style={styles.titleText}>Tags</Text>
           <View style={styles.dropdownInputView}>
             <Picker
-              selectedValue={endDate}
+              selectedValue={tag}
               style={{ height: 50, width: 150 }}
-              onValueChange={(itemValue, itemIndex) => setEndDate(itemValue)}
+              onValueChange={(itemValue, itemIndex) => setTag(itemValue)}
             >
-              <Picker.Item label="24 Hours" value={tomorrow} />
-              <Picker.Item label="2 Days" value={tomorrow.setDate(tomorrow.getDate() + 2)} />
+              {tagArr}
             </Picker>
           </View>
-          {/*Tags input*/}
-          <Text style={styles.titleText}>Tags</Text>
-          <View style={styles.inputView}>
-            <TextInput
-            style={styles.TextInput}
-            placeholder="Enter Tags with comma (e.g. fun, colourful)"
-            placeholderTextColor="grey"
-            onChangeText={(tags) => setTags(tags)}
-            />
+          <View style={styles.iconView}>
+            <TouchableOpacity onPress={() => {setCreateTagModalVisible(true);setTmpTag('')}}>
+              <View style={{alignItems:'center'}}>
+                <Icon name="plus" color="#000000" size={25}/>
+                <Text>New Tag</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.bottomButton}>
@@ -242,7 +328,12 @@ const Upload = ({navigation}) => {
 
         </Modal>
         <View style={styles.imagePane}>
-          {imageList.map(image => <Image key={image.key} styles={styles.tinyLogo} source={{uri:image.uri}}/>)}
+          {console.log(imageList[1])}
+          {imageList.length == 1 && <View><Image style={{height: '100%', width: '50%', borderRadius: 10}} source={{uri: imageList[0].uri}}/></View>}
+          {imageList.length == 2 && 
+            <View style={{flexDirection: 'row'}}><Image style={{height: 250, width: 190, borderRadius: 10}} source={{uri: imageList[0].uri}}/>
+            <Image style={{height: 250, width: 190, borderRadius: 10}} source={{uri: imageList[1].uri}}/></View>
+          }
         </View>
         <View style={styles.button}>
           <Button title = "Add Images" color="black" onPress={() =>{setUploadImageModalVisible(true);}}> </Button>
@@ -302,20 +393,16 @@ const Upload = ({navigation}) => {
         <View style={{paddingBottom: 50,paddingTop: 5}}>
           <Text style={styles.createText}>Summary</Text>
         </View>
-        <View style={{marginLeft:'2%',marginTop:'-8%'}}>
-          <Card 
-                key={"YEET"}
-                currentUser={auth().currentUser.uid} //this is the current logged in user
-                pollID={"YEET"}
-                title={title}
-                tag={tag}
-                date={endDate.toLocaleDateString()}
-                username={user.displayName}
-                image1Name={imageList[0].fileName}
-                image2Name={imageList[1].fileName}
-                im1Votes={0}
-                im2Votes={0}
-                votedList={[]}/>
+        <View style={{justifyContent: 'center',marginTop:'-8%', flexDirection: 'column'}}>
+          <Text style={{margin: 10, alignSelf: 'flex-start', fontSize: 30}}>Poll Title: {title}</Text>
+        </View>
+        {imageList.length == 2 && 
+            <View style={{flexDirection: 'row', alignSelf:'center'}}><Image style={{height: 250, width: 190, borderRadius: 10}} source={{uri: imageList[0].uri}}/>
+            <Image style={{height: 250, width: 190, borderRadius: 10}} source={{uri: imageList[1].uri}}/></View>
+          }
+        
+        <View style={{alignSelf: 'flex-start', marginLeft: 10, marginTop: 20}}>
+          <Text>End Date: {endDate.toLocaleDateString()}</Text>
         </View>
         <View style={styles.bottomButton}>
           <View style={{marginBottom:'2%'}}>
@@ -343,8 +430,8 @@ const styles = StyleSheet.create({
   },
 
   bottomButton: {
-    position: 'absolute',
-    bottom:50,
+    // position: 'absolute',
+    bottom:-50,
     width: '90%',
     marginLeft: '5%',
   },
@@ -384,7 +471,6 @@ const styles = StyleSheet.create({
   },
 
   signUpButton: {
-    
     width: '100%',
     height: 35,
     alignItems: 'center',
@@ -404,7 +490,7 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: "whitesmoke",
+    backgroundColor: "#FFDBA1",
     flexDirection:'row',
     borderRadius: 50,
     width: "90%",
@@ -412,28 +498,44 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: '5%',
     alignItems: "center",
+    paddingLeft: 10,
     borderTopRightRadius:150,
     borderTopLeftRadius:250,
     borderBottomLeftRadius:250,
-    borderBottomRightRadius:230,
+    borderBottomRightRadius:250,
     borderBottomWidth: StyleSheet.hairlineWidth
     //textAlign: 'center'
     
   },
   dropdownInputView: {
-    backgroundColor: "whitesmoke",
+    backgroundColor: "#FFDBA1",
     flexDirection:'row',
     borderRadius: 50,
     width: "40%",
     height: 45,
     marginBottom: 20,
+    marginLeft: '32%',
+    alignItems: "center",
+    borderTopRightRadius:150,
+    borderTopLeftRadius:250,
+    borderBottomLeftRadius:250,
+    borderBottomRightRadius:250,
+    borderBottomWidth: 1
+    //textAlign: 'center'
+    
+  },
+  iconView: {
+    borderRadius: 50,
+    width: "40%",
+    height: 45,
+    marginBottom: 20,
+    marginTop: -20,
     marginLeft: '33%',
     alignItems: "center",
     borderTopRightRadius:150,
     borderTopLeftRadius:250,
     borderBottomLeftRadius:250,
     borderBottomRightRadius:230,
-    borderBottomWidth: 1
     //textAlign: 'center'
     
   },
@@ -516,8 +618,17 @@ const styles = StyleSheet.create({
   buttonOpen: {
     backgroundColor: "#F194FF",
   },
+  buttonSubmit: {
+    backgroundColor: "#E65400",
+  },
   buttonClose: {
-    backgroundColor: "#21FFFF",
+    backgroundColor: "#000000",
+    position:'absolute',
+    top:10,
+    right:10,
+    borderRadius: 20,
+    padding: 5,
+    elevation: 3
   },
   textStyle: {
     color: "white",

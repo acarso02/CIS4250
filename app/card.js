@@ -88,8 +88,8 @@ const Card = (props) => {
     if(i==selectedImage){
       return {
         height: 200,
-        width: 150,
-        marginHorizontal: 10,
+        width: 140,
+        marginHorizontal: 5,
         borderRadius: 10,
         flexDirection: 'row',
         borderWidth: 5,
@@ -99,8 +99,8 @@ const Card = (props) => {
     else{
       return {
         height: 200,
-        width: 150,
-        marginHorizontal: 10,
+        width: 140,
+        marginHorizontal: 5,
         borderRadius: 10,
         flexDirection: 'row',
       }
