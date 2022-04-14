@@ -43,6 +43,15 @@ const SignInScreen = ({navigation}) => {
     })
   }
 
+  function autoLog(){
+    auth()
+    .signInWithEmailAndPassword('mg@g.com', 'aaaaaa')
+    .then(() => {
+      console.log("Logged In!");
+      navigation.navigate(HomeScreen);
+    })
+  }
+
   return (
     <ScrollView style={{flex: 1,backgroundColor:'white'}}
     showsVerticalScrollIndicator={false}>
@@ -50,7 +59,9 @@ const SignInScreen = ({navigation}) => {
       {/* Top View of the Brand */}
       <View style={styles.brandView}>
         <Text style={styles.titleText}>ImPollse</Text>
-        <Ionicons style={styles.shadow} name="checkmark-done-circle-sharp" size={140} color="#00A6C2" />
+        <View style={{elevation:20}}>
+          <Ionicons style={styles.shadow} name="checkmark-done-circle-sharp" size={140} color="#E65400" />
+        </View>
       </View>
 
       {/* Bottom/Welcome View of Brand*/}
@@ -72,7 +83,7 @@ const SignInScreen = ({navigation}) => {
             <TextInput
             style={styles.TextInput}
             placeholder="Email"
-            placeholderTextColor="#C9C9C9"
+            placeholderTextColor="#ffffff"
             
             onChangeText={(email) => setEmail(email)}
             
@@ -91,7 +102,7 @@ const SignInScreen = ({navigation}) => {
               style={styles.TextInput}
               placeholder="Password"
             
-              placeholderTextColor="#C9C9C9"
+              placeholderTextColor="#ffffff"
               secureTextEntry={true}
               //inlineImageLeft="search_icon"
               onChangeText={(password) => setPassword(password)}
@@ -103,13 +114,16 @@ const SignInScreen = ({navigation}) => {
           </TouchableOpacity>
 
           <View style={styles.loginButton}> 
-            <Button style={styles.buttonText}title = "Log In" color='#F51007' onPress={() =>{logIn(email, password)}}> </Button>
+            <Button title = "Log In" color='#606160' onPress={() =>{logIn(email, password)}}> </Button>
           </View>
 
         </View>
 
       </View>
-
+      <View>
+        <Button title = "yeet" onPress={() => autoLog()}/>
+      </View>
+      
       <View style={styles.dontHave}>
       <Text style={{color:'black',fontSize: 15,marginLeft:90, letterSpacing: 2,marginTop: 60,paddingBottom:0}}> Don't have an account?</Text>
 
@@ -119,6 +133,7 @@ const SignInScreen = ({navigation}) => {
               
             </TouchableOpacity>
       </View>
+      
     </ScrollView>
   );
 
@@ -130,14 +145,27 @@ const styles  = StyleSheet.create({
 
   
   inputView: {
-    backgroundColor: "#565653",
+    backgroundColor: "#E65400",
     flexDirection:'row',
     borderRadius: 30,
     width: "100%",
     height: 45,
     marginBottom: 20,
     alignItems: "center",
+    opacity:0.75,
+    elevation: 3
     
+  },
+  bottomView:{
+    flex: 1.5,
+    backgroundColor: '#ED6C11',
+    bottom: 0,
+    borderTopStartRadius: 230,
+    borderTopEndRadius: 780,
+    borderBottomStartRadius:940,
+    borderBottomEndRadius:720,
+    marginTop: 50,
+    elevation: 5
   },
 
   titleText: {
@@ -179,7 +207,7 @@ const styles  = StyleSheet.create({
       height: 45,
       alignItems: 'center',
       //backgroundColor:'black',
-      borderRadius:40
+      borderRadius:40,
   },
 
 
@@ -191,6 +219,7 @@ const styles  = StyleSheet.create({
 
   brandView:{
     flex:1,
+    marginTop:15,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor:'white'
@@ -203,37 +232,26 @@ const styles  = StyleSheet.create({
     textTransform: 'uppercase',
   },
 
-  bottomView:{
-    flex: 1.5,
-    backgroundColor: '#E65400',
-    bottom: 0,
-    borderTopStartRadius: 230,
-    borderTopEndRadius: 780,
-    borderBottomStartRadius:940,
-    borderBottomEndRadius:720,
-    marginTop: 50,
-    elevation: 5
-  },
+  
 
   TextInput: {
     height: 50,
     flex: 1,
     padding: 5,
     letterSpacing:2,
-    fontSize:12,
-    color: '#C9C9C9'
+    fontSize:13,
+    color: '#000000'
   },
 
   shadow: {
-    shadowColor: 'black',
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    // Android
-    shadowOffset: {
-        width: 10,            // Same rules apply from above
-        height: 1,           // Can't both be 0
-    },
-    elevation: 100
+    flex: 1.5,
+    bottom: 0,
+    borderTopStartRadius: 230,
+    borderTopEndRadius: 780,
+    borderBottomStartRadius:940,
+    borderBottomEndRadius:720,
+    elevation: 5,
+    opacity:1,
   }
 
 })

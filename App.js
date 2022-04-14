@@ -24,7 +24,7 @@ export default () => (
     <Stack.Navigator>
 
       <Stack.Screen name="SignInScreen" component={SignInScreen} options = {{headerShown:false}} />
-      <Stack.Screen name="HomeScreen" component={HomeScreen} options = {{title: 'Home'}}/>
+      <Stack.Screen name="HomeScreen" component={HomeScreen} options = {{headerShown:false}}/>
       <Stack.Screen name="Register" component={Register} options = {{headerShown: false}}/>
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} options = {{title: 'Settings'}}/>
       <Stack.Screen name="Notifications" component={Notifications} options = {{title: 'Notifications'}}/>

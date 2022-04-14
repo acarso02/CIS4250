@@ -30,6 +30,7 @@ const HomeScreen = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pollArr, setPollArr] = useState([]);  
+  const [loading, setLoading] = useState(true);
 
   /*Creates a user listener to hold the state of the user*/
   const [initializing, setInitializing] = useState(true);
@@ -37,6 +38,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    setLoading(true);
 
     getPolls();
     return subscriber; // unsubscribe on unmount
@@ -48,21 +50,22 @@ const HomeScreen = ({navigation}) => {
       setInitializing(false);
   } 
 
-  function getPolls(){ 
+  async function getPolls(){ 
       var tempArr = []; 
       firestore()
       .collection('polls')
       .get() 
-      .then(querySnapshot => {
-      console.log('Total polls: ', querySnapshot.size)
-      
-      querySnapshot.forEach(documentSnapshot => {
-        tempArr.push(documentSnapshot);
+      .then(async querySnapshot => {
+        console.log('Total polls: ', querySnapshot.size)
+        
+        querySnapshot.forEach(documentSnapshot => {
+          tempArr.push(documentSnapshot);
 
-        console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
-      });
-      setPollArr(tempArr);    
-    }); 
+          console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+        });
+        await setPollArr(tempArr);    
+        await setLoading(false);
+      }); 
   }
   
   if (initializing) return null;
@@ -88,7 +91,7 @@ const HomeScreen = ({navigation}) => {
   //IMPORTANT TO LEARN MAPPING STATEMENTS AND HOW THEY CAN BE USED
   //imageList.map(image => (<Text>Name:{image.fileName}</Text>))
 
-  return (
+  return (loading?<View></View>:
     <ScrollView 
       style={{flex: 1,backgroundColor:'white'}}
         showsVerticalScrollIndicator={false}
@@ -103,12 +106,13 @@ const HomeScreen = ({navigation}) => {
 
       <View style={{alignItems: 'center', marginVertical: 20}}> 
         {pollArr.map((p, k) => {
+          let poll = p.data();
           return (
             <Card 
               key={k}
               currentUser={auth().currentUser.uid} //this is the current logged in user
               pollID={p.id}
-              title={p.data().Title} 
+              title={p.data().Title}
               tag={p.data().Tags}
               date={p.data().PollLength}
               username={p.data().User}
@@ -116,7 +120,7 @@ const HomeScreen = ({navigation}) => {
               image2Name={p.data().Images.Image2.imageName}
               im1Votes={p.data().Images.Image1.Votes}
               im2Votes={p.data().Images.Image2.Votes}
-              votedList={p.data().Voted}/>
+              votedList={p.data().hasVoted}/>
           );
         })}
       </View> 
