@@ -7,7 +7,7 @@ import {
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import reactDom from 'react-dom';
 import {StyleSheet, Input, View, SafeAreaView, Button, ScrollView, ImageBackground, 
         Dimensions, TextInput, StatusBar, TouchableOpacity, 
@@ -16,11 +16,30 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SearchBar } from 'react-native-elements';
+import auth from '@react-native-firebase/auth';
 import SignIn from './SignInScreen';
 import SettingsScreen from './SettingsScreen';
 import HomeScreen from './HomeScreen';
 
 const Profile = ({navigation}) => {
+
+  /*Creates a user listener to hold the state of the user*/
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+
+    return subscriber; // unsubscribe on unmount
+  }, []); 
+
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing)
+      setInitializing(false);
+  } 
+
+  if (initializing) return null;
 
   return (
     <SafeAreaView style={styles.container}>
