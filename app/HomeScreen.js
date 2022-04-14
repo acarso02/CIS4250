@@ -60,13 +60,10 @@ const HomeScreen = ({navigation}) => {
         firestore()
         .collection('tags')
         .get() 
-        .then(async querySnapshot => {
-          // console.log('Total tags: ', querySnapshot.size)
-          
+        .then(async querySnapshot => {          
           querySnapshot.forEach(documentSnapshot => {
             tempTagArr.push(documentSnapshot.data().tag);
   
-            // console.log('Tags: ', documentSnapshot.id, documentSnapshot.data().tag);
           });
           await setTagArr(tempTagArr);    
         });
@@ -82,13 +79,9 @@ const HomeScreen = ({navigation}) => {
     firestore()
     .collection('polls')
     .get() 
-    .then(async querySnapshot => {
-      // console.log('Total polls: ', querySnapshot.size)
-      
+    .then(async querySnapshot => {      
       querySnapshot.forEach(documentSnapshot => {
         tempArr.push(documentSnapshot);
-
-        // console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
       });
       setPollArr(tempArr);    
       setLoading(false);
@@ -152,13 +145,10 @@ const HomeScreen = ({navigation}) => {
                   .collection('polls')
                   .where('Tags', '==', tag)
                   .get() 
-                  .then(async querySnapshot => {
-                    // console.log('Total polls: ', querySnapshot.size)
-                    
+                  .then(async querySnapshot => {                    
                     querySnapshot.forEach(documentSnapshot => {
                       newTempArr.push(documentSnapshot);
               
-                      // console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
                     });
                     await setPollArr(newTempArr);    
                     await setLoading(false);
