@@ -226,7 +226,7 @@ const PollHighlight = ({route, navigation}) => {
         
         <View style={styles.inputSection}>
           <TextInput style={styles.input} placeholder="Comment" onChangeText={(thisComment) => setMyComment(thisComment)}></TextInput>
-          <Button style={{flex: 1}} title='Submit' onPress={() => {postComment()}}></Button>
+          <Button style={{flex: 1}} title='Submit' color={'#E65400'} onPress={() => {postComment()}}></Button>
         </View>
 
         {poll.UserId == auth().currentUser.uid && 
