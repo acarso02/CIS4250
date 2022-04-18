@@ -20,7 +20,7 @@ const Account = ({navigation}) => {
 
     const {user, initializing} = useUser();
 
-    console.log(user);
+    // console.log(user);
 
     return (
     <ScrollView style={styles.rowContainer}

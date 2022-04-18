@@ -36,22 +36,22 @@ const PollDetails = ({ route, navigation }) => {
 
     useEffect(() => {
       const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-      console.log(auth().currentUser.displayName); 
+      // console.log(auth().currentUser.displayName); 
       var tempArr = []; 
       firestore()
         .collection('polls')
         .where('User', '==', auth().currentUser.displayName)
         .get() 
         .then(querySnapshot => {
-        console.log('Total polls: ', querySnapshot.size)
+        // console.log('Total polls: ', querySnapshot.size)
       
       querySnapshot.forEach(documentSnapshot => {
         tempArr.push(documentSnapshot.data());
-        console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+        // console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
       });
         setPollArr(tempArr);     
       }); 
-      console.log(id)
+      // console.log(id)
         return subscriber; // unsubscribe on unmount
     }, []);
 
@@ -86,7 +86,7 @@ const PollDetails = ({ route, navigation }) => {
             
             {pollArr.map((p, k) => {
 
-              console.log("to component: " + p.Title); 
+              // console.log("to component: " + p.Title); 
               return (
                 <Card 
                   key={k}

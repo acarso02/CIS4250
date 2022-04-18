@@ -94,12 +94,12 @@ const HomeScreen = ({navigation}) => {
       .where('Tags', 'array-contains', tag)
       .get() 
       .then(async querySnapshot => {
-        console.log('Total polls: ', querySnapshot.size)
+        // console.log('Total polls: ', querySnapshot.size)
         
         querySnapshot.forEach(documentSnapshot => {
           newTempArr.push(documentSnapshot);
   
-          console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
+          // console.log('Poll ID: ', documentSnapshot.id, documentSnapshot.data().Title);
         });
         await setPollArr(newTempArr);    
         await setLoading(false);

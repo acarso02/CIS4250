@@ -48,7 +48,7 @@ const PollHighlight = ({route, navigation}) => {
 
   useEffect( async () => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    console.log(pollID);
+    // console.log(pollID);
     await getPoll();
     
     setInitializing(false);
@@ -71,7 +71,7 @@ const PollHighlight = ({route, navigation}) => {
       .then(docSnapshot => {
         if (docSnapshot.exists) {
           tempPoll = docSnapshot.data();
-          console.log(tempPoll);
+          // console.log(tempPoll);
           setPoll(tempPoll);
           getImage1(tempPoll);
           getImage2(tempPoll);

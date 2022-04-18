@@ -43,14 +43,14 @@ const SignInScreen = ({navigation}) => {
     })
   }
 
-  function autoLog(){
-    auth()
-    .signInWithEmailAndPassword('mg@g.com', 'aaaaaa')
-    .then(() => {
-      console.log("Logged In!");
-      navigation.navigate(HomeScreen);
-    })
-  }
+  // function autoLog(){
+  //   auth()
+  //   .signInWithEmailAndPassword('mg@g.com', 'aaaaaa')
+  //   .then(() => {
+  //     console.log("Logged In!");
+  //     navigation.navigate(HomeScreen);
+  //   })
+  // }
 
   return (
     <ScrollView style={{flex: 1,backgroundColor:'white'}}
